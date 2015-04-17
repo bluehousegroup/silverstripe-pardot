@@ -1,0 +1,12 @@
+---
+Name: pardot
+After:
+  - 'framework/*'
+  - 'cms/*'
+---
+SiteTree:
+  extensions:
+    - PardotTracker
+SiteConfig:
+  extensions:
+    - PardotConfig
