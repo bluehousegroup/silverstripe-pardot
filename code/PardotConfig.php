@@ -1,17 +1,18 @@
 <?php
 class PardotConfig extends DataExtension
 {
-
-		
-	private static $db = array(
-		'pardot_email' => 'Varchar',
-		'pardot_password' => 'Varchar',
-		'pardot_campaign' => 'Varchar',
-		'pardot_https'    => 'Varchar',
-		'pardot_api_key'  => 'Varchar',
-		'pardot_user_key' => 'Varchar'
-	);
-  
+    private static $db = array(
+        'pardot_email' => 'Varchar',
+        'pardot_password' => 'Varchar',
+        'pardot_campaign' => 'Varchar',
+        'pardot_https'    => 'Varchar',
+        'pardot_api_key'  => 'Varchar',
+        'pardot_user_key' => 'Varchar'
+    );
+    
+    /*
+    *CMS fields for configuring Pardot plugin 
+    */ 
     public function updateCMSFields(FieldList $fields) {
         $fields->addFieldToTab("Root.Pardot", 
          new EmailField("pardot_email","Email Address")
@@ -38,6 +39,9 @@ class PardotConfig extends DataExtension
          );
     }
    
+    /*
+    *Validates API credentials. Stores API key in database if valid.
+    */
     public function validate(ValidationResult $validationResult)
     {
         $email = $this->owner->pardot_email;
@@ -49,32 +53,35 @@ class PardotConfig extends DataExtension
         if($api_key)
         {
             $this->owner->pardot_api_key = $api_key;
+            
             return true;
         }
         else
         {
-            return $validationResult->error('Your API credentials are invalid');
-             
+            return $validationResult->error('Your API credentials are invalid'); 
         }
     }
 
-   
-
-
-    
+    /**
+    *gets array of campaigns from pardot api formatted for 
+    *Silverstripe DropdownField
+    *@return array of campaign ids to campaign names
+    */
     public static function getCampaignValuesForCms()
-    {	
-    	$pardot = new Pardot_API(Self::getPardotCredentials());
-        
+    {   
+        $pardot = new Pardot_API(Self::getPardotCredentials());
         $arrayOfCampaignValuesForCms = array();    
         $campaignsFromApi = $pardot->get_campaigns(Self::getPardotCredentials());
         foreach($campaignsFromApi as $campaign)
             $arrayOfCampaignValuesForCms[$campaign->id] = $campaign->name;
-   	    
+        
         return $arrayOfCampaignValuesForCms;
     }
 
-
+    /**
+    *gets array of Pardot API credentials from SiteConfig
+    *@return auth array for pardot api
+    */
     public static function getPardotCredentials()
     {	
     	 $config = SiteConfig::current_site_config();
@@ -82,6 +89,10 @@ class PardotConfig extends DataExtension
          return array('email'=>$config->pardot_email,'password'=>$config->pardot_password, 'user_key'=>$config->pardot_user_key, 'api_key'=>$config->pardot_api_key);
     }
 
+    /**
+    *gets campaign code from database
+    *@return string campaign code
+    */
     public static function getCampaignCode()
     {
         $config = SiteConfig::current_site_config();
@@ -90,6 +101,10 @@ class PardotConfig extends DataExtension
     }
 
 
+    /**
+    *checks current pardot api credentials  
+    *@return string api key if valid, empty string if non-valid
+    */
     public static function validApiCredentials()
     {
         $pardot = new Pardot_API();
