@@ -507,8 +507,6 @@ x	 */
 			}
 
 		}
-		print_r("made it here");
-		error_log(print_r($this,1));
 	  return $response;
 	}
 
