@@ -1,6 +1,10 @@
 <?php
 class PardotTracker extends SiteTreeExtension {
 
+	/**
+	*gets tracking code based on campaign
+	*@return tracking javascript for pardot api
+	*/
 	public static function GetPardotTrackingJs()
 	{
 		$html = false;
@@ -8,8 +12,8 @@ class PardotTracker extends SiteTreeExtension {
 		
 		if($campaign)
 		{
-			$tracker_cache = SS_Cache::factory('tracking');
-			if(!$pardot_tracking_code_template = $tracker_cache->load('pardot_tracking_code_template'))
+			$tracker_cache = SS_Cache::factory('Pardot');
+			if(!$tracking_code_template = $tracker_cache->load('pardot_tracking_code_template'))
 			{
 				$api_credentials = PardotConfig::getPardotCredentials();
 				$pardot = new Pardot_API();
@@ -29,10 +33,8 @@ class PardotTracker extends SiteTreeExtension {
 		$campaign = $campaign + 1000; 
 		$html =<<<HTML
 <script> type="text/javascript">
-<!--
 piCId = '{$campaign}';
-'{$tracking_code_template}'
--->
+{$tracking_code_template}
 </script>
 HTML;
 

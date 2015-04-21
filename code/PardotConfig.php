@@ -10,7 +10,7 @@ class PardotConfig extends DataExtension
         'pardot_user_key' => 'Varchar'
     );
     
-    /*
+    /**
     *CMS fields for configuring Pardot plugin 
     */ 
     public function updateCMSFields(FieldList $fields) {
@@ -39,7 +39,7 @@ class PardotConfig extends DataExtension
          );
     }
    
-    /*
+    /**
     *Validates API credentials. Stores API key in database if valid.
     */
     public function validate(ValidationResult $validationResult)
