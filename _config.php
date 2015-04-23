@@ -1,4 +1,3 @@
 <?php
-HtmlEditorConfig::get('cms')->enablePlugins(array('pardot' => '/Pardot/plugin/pardot_plugin.js'));
-HtmlEditorConfig::get('cms')->addButtonsToLine(2, 'pardot');
+ShortcodeParser::get('default')->register('pardot_shortcode', array('PardotShortCode', 'PardotForm'));
 

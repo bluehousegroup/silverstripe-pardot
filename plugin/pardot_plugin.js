@@ -5,10 +5,13 @@
             var self = this;
 
             ed.addButton ('pardot', {
-                'title' : 'My plugin',
+                'title' : 'Drop-in form',
                 'image' : url+'/pardot-button.png',
                 'onclick' : function () {
-                    alert('Congratulations! Your plugin works!');
+                    ed.windowManager.open({
+                        title: 'Edit image',
+                        url: url + '/popup.ss'
+                    });
                 }
             });
 
