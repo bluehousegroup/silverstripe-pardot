@@ -10,4 +10,3 @@ SiteTree:
 SiteConfig:
   extensions:
     - PardotConfig
-    - PardotShortCode

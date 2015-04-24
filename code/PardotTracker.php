@@ -42,4 +42,16 @@ HTML;
 		return $html;
 	}
 
+	public static function cacheFormsByFormName()
+    {
+	  	$pardot = new Pardot_API(PardotConfig::getPardotCredentials());
+	  	$forms = $pardot->get_forms();
+
+	  	$pardot_cache = SS_Cache::factory('Pardot');
+	  	$pardot_cache->save(serialize($forms),'serialized_forms');
+
+	  	return print_r($forms,1);
+
+    }
+
 }
