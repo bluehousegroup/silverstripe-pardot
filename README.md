@@ -3,8 +3,8 @@
 Extension to integrate Pardot with your SilverStripe Site.
 
 ##Features
-* adds tracking codes based on campaign to entire site
-* shortcode api for dropping in forms and dynamic content from the Pardot dashboard into SilverStripe.
+* Adds tracking codes based on campaign to entire site.
+* Shortcode api for dropping in forms and dynamic content from the Pardot dashboard into SilverStripe.
 
 ##Requirements
 * SilverStripe 3+
