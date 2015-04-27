@@ -45,6 +45,8 @@ class PardotShortCode extends SiteTree
 				return $embed_code;
 			}
 		}
+	
+		return "";
 	}
 
    	/**
@@ -114,37 +116,37 @@ class PardotShortCode extends SiteTree
  		
  		return $unserialized_pardot_dynamic_content;
  	}
-
-    /**
+	
+	/**
 	* caches pardot forms from the pardot api.
 	*
 	* @return array Array of form objects 
 	*/
 	public static function cacheFormsFromPardotApi()
-    {
-	  	$pardot = new Pardot_API(PardotConfig::getPardotCredentials());
-	  	$forms = $pardot->get_forms();
+	{
+		$pardot = new Pardot_API(PardotConfig::getPardotCredentials());
+		$forms = $pardot->get_forms();
 
-	  	$pardot_cache = SS_Cache::factory('Pardot');
-	  	$pardot_cache->save(serialize($forms),'serialized_forms');
+		$pardot_cache = SS_Cache::factory('Pardot');
+		$pardot_cache->save(serialize($forms),'serialized_forms');
     	
-    	return $forms;
+		return $forms;
     }
-
-    /**
+	
+	/**
 	* caches pardot dynamic content from the pardot api.
 	*
 	* @return array Array of dynamic content objects 
 	*/
 	public static function cacheDynamicContentFromPardotApi()
-    {
+	{
 
-	  	$pardot = new Pardot_API(PardotConfig::getPardotCredentials());
-	  	$dynamicContent = $pardot->get_dynamicContent();
+		$pardot = new Pardot_API(PardotConfig::getPardotCredentials());
+		$dynamicContent = $pardot->get_dynamicContent();
 
-	  	$pardot_cache = SS_Cache::factory('Pardot');
-	  	$pardot_cache->save(serialize($dynamicContent),'serialized_dynamic_content');
+		$pardot_cache = SS_Cache::factory('Pardot');
+		$pardot_cache->save(serialize($dynamicContent),'serialized_dynamic_content');
     	
-    	return $dynamicContent;
+		return $dynamicContent;
     }
 }
