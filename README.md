@@ -4,7 +4,7 @@ Extension to integrate Pardot with your SilverStripe Site.
 
 ##Features
 * adds tracking codes based on campaign to entire site
-* shortcode api for dropping in forms and dynamic content from the pardot dashboard
+* shortcode api for dropping in forms and dynamic content from the Pardot dashboard into SilverStripe.
 
 ##Requirements
 * SilverStripe 3+
@@ -31,7 +31,7 @@ The shortcode for Dynamic Content:
 <pre>[pardot_dynamic, name="DYNAMIC_CONTENT_NAME"]</pre>
 
 The shortcode for Dynamic Content named "Test Content":
-<pre> [pardot_dynamic, name="Test Content"] </pre>
+<pre>[pardot_dynamic, name="Test Content"]</pre>
 
 
 If the requested form or dynamic content isn't found then nothing is displayed.
