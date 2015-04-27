@@ -9,12 +9,12 @@ Extension to integrate Pardot with your SilverStripe Site.
 ##Requirements
 * SilverStripe 3+
 
+##Configuration
+Visit http://yoursite.com/dev/build/?flush=1 to configure database for Pardot Api credentials.
+
+Go to the CMS settings and click on the Pardot tab and add Pardot account credentials.
+
 ##Tracking
-visit http://yoursite.com/dev/build/?flush=1 to configure database for Pardot Api credentials.
-
-Go to the CMS settings and click on the Pardot tab
-and add Pardot account credentials.
-
 To add tracking codes to your site simply add the following to your template. 
 <pre>$GetPardotTrackingJs</pre>
 
@@ -22,15 +22,16 @@ To add tracking codes to your site simply add the following to your template.
 
 
 The shortcode for forms: 
-<pre>[pardot_form, title="\\<Form Title\\>"]</pre>
+<pre>[pardot_form, title="FORM_TITLE"]</pre>
 
 The shortcode for the standard form would be:
 <pre>[pardot_form, title="Standard Form"]</pre>
 
 The shortcode for Dynamic Content:
-<pre>[pardot_dynamic, name="\\<Dynamic Content Name\\>"]</pre>
+<pre>[pardot_dynamic, name="DYNAMIC_CONTENT_NAME"]</pre>
 
 The shortcode for Dynamic Content named "Test Content":
 <pre> [pardot_dynamic, name="Test Content"] </pre>
+
 
 If the requested form or dynamic content isn't found then nothing is displayed.
