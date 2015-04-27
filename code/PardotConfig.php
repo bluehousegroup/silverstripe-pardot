@@ -29,9 +29,13 @@ class PardotConfig extends DataExtension
         //option to select campaign available after they have connected
         if(PardotConfig::validApiCredentials())
         {
-            $fields->addFieldToTab("Root.Pardot", 
-             new DropdownField("pardot_campaign","Campaign",Self::getCampaignValuesForCms())
-             );
+            $campaign_dropdown = new DropdownField("pardot_campaign","Campaign",Self::getCampaignValuesForCms());
+            $campaign_dropdown->setEmptyString("Select a Campaign");
+            $fields->addFieldToTab("Root.Pardot",$campaign_dropdown);
+        }
+        else
+        {
+            $fields->addFieldToTab("Root.Pardot",new LiteralField($name = "pardot_campaign", $content = "<p> Once you are connected, re-visit this page and select a campaign.</p>"));
         }
         
         $fields->addFieldToTab("Root.Pardot", 
@@ -50,15 +54,16 @@ class PardotConfig extends DataExtension
         $auth = array('email' =>$email, 'password'=>$password,'user_key' => $user_key);
         $pardot = new Pardot_API();
         $api_key = $pardot->authenticate($auth);
+        
+        //credentials are good
         if($api_key)
         {
             $this->owner->pardot_api_key = $api_key;
-            
             return true;
         }
         else
-        {
-            return $validationResult->error('Your API credentials are invalid'); 
+        { 
+            return $validationResult->error('Your API credentials are invalid');
         }
     }
 
