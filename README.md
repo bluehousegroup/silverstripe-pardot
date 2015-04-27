@@ -22,13 +22,13 @@ To add tracking codes to your site simply add the following to your template.
 
 
 The shortcode for forms: 
-<pre>[pardot_form, title="<Form Title>"]</pre>
+<pre>[pardot_form, title="<<Form Title>>"]</pre>
 
 The shortcode for the standard form would be:
 <pre>[pardot_form, title="Standard Form"]</pre>
 
 The shortcode for Dynamic Content:
-<pre>[pardot_dynamic, name="<Dynamic Content Name>"]</pre>
+<pre>[pardot_dynamic, name="<<Dynamic Content Name>>"]</pre>
 
 The shortcode for Dynamic Content named "Test Content":
 <pre> [pardot_dynamic, name="Test Content"] </pre>
