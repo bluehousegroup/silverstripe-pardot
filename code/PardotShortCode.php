@@ -1,4 +1,18 @@
 <?php
+/**
+*Class for parsing shortcode for pardot forms and dynamic content.
+*
+* PardotForm() and PardotDynamicContent() are the two endpoints for 
+* the pardot shortcode api. 
+*
+* The Class is designed so that the cache does not need to be reset by a user.
+* The API is called when the the cache is empty, or if the content in the cache
+* doesn't match the requested content name or title, effectively  resetting  the cache. 
+* 
+* shortcode endpoints configured in _config.php
+*
+*/
+
 class PardotShortCode extends SiteTree 
 {
 
@@ -9,8 +23,8 @@ class PardotShortCode extends SiteTree
 	);
 	
 	/**
-	* call back for pardot form shortcode
-	* 
+	* call back for pardot form shortcode. 
+	*
 	* @param array $arguments Values 'title' supported
 	* @return string embed_code if the title of the form exists
 	*/
@@ -21,8 +35,15 @@ class PardotShortCode extends SiteTree
 		{
 			if($embed_code = Self::getFormEmbedCodeFromCache($arguments["title"]))
 			{
-				error_log($embed_code);
 				return $embed_code;
+			}
+			else// refresh the cache and look again
+			{
+				Self::cacheFormsFromPardotApi();
+				if($embed_code = Self::getFormEmbedCodeFromCache($arguments["title"]))
+				{
+					return $embed_code;
+				}
 			}
 		}
 		
@@ -43,6 +64,14 @@ class PardotShortCode extends SiteTree
 			if($embed_code = Self::getDynamicContentEmbedCodeFromCache($arguments["name"]))
 			{
 				return $embed_code;
+			}
+			else// refresh the cache and look again
+			{
+				Self::cacheDynamicContentFromPardotApi();
+				if($embed_code = Self::getDynamicContentFromCache($arguments["name"]))
+				{
+					return $embed_code;
+				}
 			}
 		}
 	
