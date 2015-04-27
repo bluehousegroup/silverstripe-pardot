@@ -1,7 +1,10 @@
 <?php
 /**
- * PHP class for interacting with the Pardot API.
+ * This file was taken from the pardot WordPress plugin.
+ * The wordpress http request library was swapped out of the SilverStripe equivalent
  *
+ * PHP class for interacting with the Pardot API.
+ * 
  * Developed for the Pardot WordPress Plugin.
  *
  * @note $URL_PATH_TEMPLATE and $LOGIN_URL_PATH_TEMPLATE are private static rather than const because const cannot be made private
@@ -444,21 +447,7 @@ x	 */
 				'body'          => $args
 			), $args ));
 		$connect = $http_request->request();
-		/*
-		$http_response = wp_remote_request(
-			$this->_get_url( $item_type, $args ),
-			array_merge( array(
-				'timeout' 		=> '30',
-				'redirection'   => '5',
-				'method' 		=> 'POST',
-				'blocking'		=> true,
-				'compress'		=> false,
-				'decompress'	=> true,
-				'sslverify' 	=> false,
-				'body'          => $args
-			), $args )
-		);
-		*/
+
 		if ( isset($args['email']) ) {
 			$args['email'] = urlencode( $args['email'] );
 		}
