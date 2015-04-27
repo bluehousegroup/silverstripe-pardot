@@ -19,7 +19,6 @@ class PardotShortCode extends SiteTree
 		
 		if(isset($arguments["title"]))
 		{
-			error_log($arguments["title"]);
 			if($embed_code = Self::getFormEmbedCodeFromCache($arguments["title"]))
 			{
 				error_log($embed_code);
@@ -29,11 +28,23 @@ class PardotShortCode extends SiteTree
 		
 		return "";
 	}
+
+	/**
+	*call back for pardot dynamic content
+	*
+	*@param array $arguments Values 'name' supported
+	*@return string embed_code if the name of the dynamic content exists
+	*/
 	public function PardotDynamicContent($arguments, $content = null, $parser = null, $tagName)
 	{
-		//$arguments, $content = null, $parser = null, $tagName
-		error_log(print_r(Self::cacheDynamicContentFromPardotApi(),1));
-		return "hello";
+		
+		if(isset($arguments["name"]))
+		{
+			if($embed_code = Self::getDynamicContentEmbedCodeFromCache($arguments["name"]))
+			{
+				return $embed_code;
+			}
+		}
 	}
 
    	/**
