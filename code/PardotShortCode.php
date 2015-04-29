@@ -88,7 +88,7 @@ class PardotShortCode extends SiteTree
 	{
 		$forms = Self::getFormsFromCache();
 		foreach($forms as $form)
-			if($formTitle == $form->name)
+			if(Self::checkNameOrTitleEqual($formTitle, $form->name))
 				return $form->embedCode;
 
 		return false;
@@ -104,7 +104,7 @@ class PardotShortCode extends SiteTree
 	{
 		$dynamicContents = Self::getDynamicContentFromCache();
 		foreach($dynamicContents as $dynamicContent)
-			if($dynamicContentTitle == $dynamicContent->name)
+			if(Self::checkNameOrTitleEqual($dynamicContentTitle,$dynamicContent->name))
 				return $dynamicContent->embedCode;
 
 		return false;
@@ -178,4 +178,18 @@ class PardotShortCode extends SiteTree
 		
 		return $dynamicContent;
 	}
+
+	/**
+	* checks equivilance of two strings white space and capitalization doesnt matter
+	*
+	* Used to make api parameters more forging
+	* @param string item1
+	* @param string item2
+	* bool true if strings are equal after removing whitespace and converted to lowercase.
+	*/
+	private static function checkNameOrTitleEqual($item1, $item2)
+	{
+		return strtolower(str_replace(" ","",$item1)) == strtolower(str_replace(" ","",$item2));
+	}
+
 }
