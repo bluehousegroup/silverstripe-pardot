@@ -180,9 +180,9 @@ class PardotShortCode extends SiteTree
 	}
 
 	/**
-	* checks equivilance of two strings white space and capitalization doesnt matter
+	* checks equivalence of two strings white space and capitalization doesnt matter
 	*
-	* Used to make api parameters more forging
+	* Used to make api parameters more forgiving
 	* @param string item1
 	* @param string item2
 	* bool true if strings are equal after removing whitespace and converted to lowercase.
