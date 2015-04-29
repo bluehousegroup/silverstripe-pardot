@@ -29,9 +29,7 @@ class PardotConfig extends DataExtension
         //option to select campaign available after they have connected
         if(PardotConfig::validApiCredentials())
         {
-            $campaign_dropdown = new DropdownField("pardot_campaign","Campaign",Self::getCampaignValuesForCms());
-            $campaign_dropdown->setEmptyString("Select a Campaign");
-            $fields->addFieldToTab("Root.Pardot",$campaign_dropdown);
+            $fields->addFieldToTab("Root.Pardot",Self::getCampaignCmsDropdown());
         }
         else
         {
@@ -65,6 +63,18 @@ class PardotConfig extends DataExtension
         { 
             return $validationResult->error('Your API credentials are invalid');
         }
+    }
+    /**
+    *gets dropdown field populated with campaigns for user to choose from
+    *
+    *@return DropdownField displaying pardot campaigns 
+    */
+    public static function getCampaignCmsDropdown()
+    {
+         $campaign_dropdown = new DropdownField("pardot_campaign","Campaign",Self::getCampaignValuesForCms());
+         $campaign_dropdown->setEmptyString("Select a Campaign");
+
+         return   $campaign_dropdown;
     }
 
     /**
