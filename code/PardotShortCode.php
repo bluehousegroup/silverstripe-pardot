@@ -102,10 +102,10 @@ class PardotShortCode extends SiteTree
 	*/
 	public static function getDynamicContentEmbedCodeFromCache($dynamicContentTitle)
 	{
-		$forms = Self::getDynamicContentFromCache();
-		foreach($forms as $form)
-			if($dynamicContentTitle == $form->name)
-				return $form->embedCode;
+		$dynamicContents = Self::getDynamicContentFromCache();
+		foreach($dynamicContents as $dynamicContent)
+			if($dynamicContentTitle == $dynamicContent->name)
+				return $dynamicContent->embedCode;
 
 		return false;
 	}
