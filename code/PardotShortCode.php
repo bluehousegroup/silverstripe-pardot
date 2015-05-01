@@ -28,7 +28,7 @@ class PardotShortCode extends SiteTree
 	* @param array $arguments Values 'title' supported
 	* @return string embed_code if the title of the form exists
 	*/
-	public function PardotForm($arguments, $content = null, $parser = null, $tagName)
+	public static function PardotForm($arguments, $content = null, $parser = null, $tagName)
 	{
 		
 		if(isset($arguments["title"]))
@@ -56,7 +56,7 @@ class PardotShortCode extends SiteTree
 	*@param array $arguments Values 'name' supported
 	*@return string embed_code if the name of the dynamic content exists
 	*/
-	public function PardotDynamicContent($arguments, $content = null, $parser = null, $tagName)
+	public static function PardotDynamicContent($arguments, $content = null, $parser = null, $tagName)
 	{
 		
 		if(isset($arguments["name"]))

@@ -10,3 +10,7 @@ SiteTree:
 SiteConfig:
   extensions:
     - PardotConfig
+
+Director:
+  rules:
+    'pardot' : 'PardotPage'
