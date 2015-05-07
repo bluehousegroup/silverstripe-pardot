@@ -224,7 +224,7 @@ class PardotShortCode extends SiteTree
 			}
 			if(isset($arguments['classes']))
 			{
-
+				$embed_code = str_replace( '<iframe', "<iframe class=\"pardotform {$arguments['classes']}\"", $embed_code );
 			}
 
 			return $embed_code;
