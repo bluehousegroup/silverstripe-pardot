@@ -12,9 +12,12 @@
 			<p class="field dropdown">
 				<select id="selected_form">
 					<% loop $Forms %>
-					<option value="[pardot_form, title='$name']">$name</option>
+					<option value="[pardot_form, title='$name'">$name</option>
 					<% end_loop %>
 				</select>
+			</p>
+			<p>
+				Height: <input type="text" id="form-height"> With: <input type="text" id="form-width"> Classes: <input type="text" id="form-classes">
 			</p>
 			<p>
 				<button class="action ss-ui-alternate ui-button ui-widget ui-state-default ui-corner-right ss-ui-button ui-button-text-icon-primary ss-ui-action-constructive" id="pardot-submit-form">Add Form</button>
@@ -33,9 +36,12 @@
 			<p class="field dropdown">
 				<select id="selected_content">
 					<% loop $DynamicContent %>
-					<option value="[pardot_dynamic, name='$name']">$name</option>
+					<option value="[pardot_dynamic, name='$name'">$name</option>
 					<% end_loop %>
 				</select>
+			</p>
+			<p>
+				Height: <input type="text" id="content-height"> With: <input type="text" id="content-width"> Classes: <input type="text" id="content-classes">
 			</p>
 			<p>
 				<button class="action ss-ui-alternate ui-button ui-widget ui-state-default ui-corner-right ss-ui-button ui-button-text-icon-primary ss-ui-action-constructive" id="pardot-submit-dynamic">Add Dynamic content</button>

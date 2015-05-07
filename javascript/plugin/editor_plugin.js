@@ -5,6 +5,16 @@
 	jQuery('body').on('click', '#pardot-submit-form', function(e){
 		e.preventDefault();
 		output = jQuery("#selected_form").val();
+		height = jQuery("#form-height").val();
+		width = jQuery("#form-width").val();
+		classes = jQuery("#form-classes").val();
+		if(height.length > 0)
+			output += ", height='"+height+"'";
+		if(width.length > 0)
+			output += ", width='"+width+"'";
+		if(classes.length > 0)
+			output += ", class='"+classes+"'";
+		output += "]";
 		tinymce.execCommand('mceReplaceContent', false, output);
 		jQuery('.htmleditorfield-pardotdialog').remove();
 
@@ -14,6 +24,16 @@
 	jQuery('body').on('click', '#pardot-submit-dynamic', function(e){
 		e.preventDefault();
 		output = jQuery("#selected_content").val();
+		height = jQuery("#content-height").val();
+		width = jQuery("#content-width").val();
+		classes = jQuery("#content-classes").val();
+		if(height.length > 0)
+			output += ", height='"+height+"'";
+		if(width.length > 0)
+			output += ", width='"+width+"'";
+		if(classes.length > 0)
+			output += ", class='"+classes+"'";
+		output += "]";
 		tinymce.execCommand('mceReplaceContent', false, output);
 		jQuery('.htmleditorfield-pardotdialog').remove();
 

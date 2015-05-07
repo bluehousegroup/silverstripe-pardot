@@ -35,14 +35,14 @@ class PardotShortCode extends SiteTree
 		{
 			if($embed_code = Self::getFormEmbedCodeFromCache($arguments["title"]))
 			{
-				return $embed_code;
+				return Self::addAttributes($embed_code, $arguments, 'Form');
 			}
 			else// refresh the cache and look again
 			{
 				Self::cacheFormsFromPardotApi();
 				if($embed_code = Self::getFormEmbedCodeFromCache($arguments["title"]))
 				{
-					return $embed_code;
+					return Self::addAttributes($embed_code, $arguments, 'Form');
 				}
 			}
 		}
@@ -63,14 +63,14 @@ class PardotShortCode extends SiteTree
 		{
 			if($embed_code = Self::getDynamicContentEmbedCodeFromCache($arguments["name"]))
 			{
-				return $embed_code;
+				return Self::addAttributes($embed_code, $arguments, 'DynamicContent');
 			}
 			else// refresh the cache and look again
 			{
 				Self::cacheDynamicContentFromPardotApi();
 				if($embed_code = Self::getDynamicContentFromCache($arguments["name"]))
 				{
-					return $embed_code;
+					return Self::addAttributes($embed_code, $arguments, 'DynamicContent');
 				}
 			}
 		}
@@ -192,4 +192,63 @@ class PardotShortCode extends SiteTree
 		return strtolower(str_replace(" ","",$item1)) == strtolower(str_replace(" ","",$item2));
 	}
 
+	/**
+	*add the other attributes included to the embed code
+	*supports type = 'Form' or 'DynamicContent'
+	*/
+	public static function addAttributes($embed_code, $arguments, $type)
+	{
+		if($type == 'Form')
+		{
+			if(isset($arguments['height']))
+			{
+				if(preg_match( '#height="[^"]+"#', $embed_code, $matches))
+				{
+					$embed_code = str_replace($matches[0], "height=\"{$arguments['height']}\"", $embed_code);
+				}
+				else
+				{
+					$embed_code = str_replace('iframe', "iframe height=\"{$arguments['height']}\"", $embed_code);
+				}
+			}
+			if(isset($arguments['width']))
+			{
+				if ( preg_match( '#width="[^"]+"#', $embed_code, $matches ) )
+				{
+					$embed_code = str_replace($matches[0], "width=\"{$arguments['width']}\"", $embed_code);
+				}
+				else
+				{
+					$embed_code = str_replace('iframe', "iframe width=\"{$arguments['width']}\"", $embed_code);
+				}
+			}
+			if(isset($arguments['classes']))
+			{
+
+			}
+
+			return $embed_code;
+		}
+		elseif($type == 'DynamicContent')
+		{
+			if(isset($arguments['height']))
+			{
+				$embed_code = str_replace( 'height:auto', "height:{$arguments['height']}", $embed_code );
+			}
+			if(isset($arguments['width']))
+			{
+				$embed_code = str_replace( 'width:auto', "width:{$arguments['width']}", $embed_code );
+			}
+			if(isset($arguments['classes']))
+			{
+				$embed_code = str_replace( 'pardotdc', "pardotdc {$arguments['classes']}", $embed_code );
+			}
+
+			return $embed_code;
+		}
+		else
+		{
+			return $embed_code;
+		}
+	}
 }
