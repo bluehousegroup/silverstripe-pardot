@@ -1,15 +1,15 @@
 <div class="main">
 	<div class="container" style="padding:20px">
-		<img src="/silverstripe-pardot/images/pardot-logo.png" style="height: 50px;">
+		<img src="/silverstripe-pardot/images/pardot-logo.png" height="50">
 		<hr>
-		<form>
+		<form class="cms">
 			<h4>
 				<span class="step-label">
 					<span class="flyout">A</span><span class="arrow"></span>
 					<span class="title">Forms</span>
 				</span>
 			</h4>
-			<p>
+			<p class="field dropdown">
 				<select id="selected_form">
 					<% loop $Forms %>
 					<option value="[pardot_form, title='$name']">$name</option>
@@ -30,7 +30,7 @@
 					<span class="title">Dynamic Content</span>
 				</span>
 			</h4>
-			<p>
+			<p class="field dropdown">
 				<select id="selected_content">
 					<% loop $DynamicContent %>
 					<option value="[pardot_dynamic, name='$name']">$name</option>

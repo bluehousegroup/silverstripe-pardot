@@ -10,8 +10,8 @@ class PardotPage extends Controller {
 	 * This function starts the routine, and is the first function
 	 * to execute off the URL accessor (defined in @see _config.php)
 	 */
-	public function index() {
 
+	public function index() {
 		$pardot = new Pardot_API(PardotConfig::getPardotCredentials());
 		$forms_object = $pardot->get_forms(PardotConfig::getPardotCredentials());
 		$forms = array();
