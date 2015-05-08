@@ -1,6 +1,6 @@
 SilverStripe Pardot
 =====================
-Extension to integrate Pardot with your SilverStripe Site.
+Module to integrate Pardot with your SilverStripe Site.
 
 ##Features
 * Adds tracking codes based on campaign to entire site.
