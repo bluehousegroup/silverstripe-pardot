@@ -1,6 +1,6 @@
 <?php
 /**
-*Class for parsing shortcode for pardot forms and dynamic content.
+* Class for parsing shortcode for pardot forms and dynamic content.
 *
 * PardotForm() and PardotDynamicContent() are the two endpoints for 
 * the pardot shortcode api. 
@@ -51,7 +51,7 @@ class PardotShortCode extends SiteTree
 	}
 
 	/**
-	*call back for pardot dynamic content
+	* call back for pardot dynamic content
 	*
 	*@param array $arguments Values 'name' supported
 	*@return string embed_code if the name of the dynamic content exists
@@ -193,62 +193,56 @@ class PardotShortCode extends SiteTree
 	}
 
 	/**
-	*add the other attributes included to the embed code
-	*supports type = 'Form' or 'DynamicContent'
+	* add the other attributes included to the embed code
+	* supports type = 'Form' or 'DynamicContent'
+	* also forces https if selected in config
 	*/
 	public static function addAttributes($embed_code, $arguments, $type)
 	{
+		$config = SiteConfig::current_site_config();
+
+		if($config->pardot_https)
+		{
+			$reg_exUrl = "/(http|https|ftp|ftps)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?/";
+			preg_match($reg_exUrl, $embed_code, $url);
+			$urlpieces = parse_url($url[0]);
+			$httpsurl = 'https://go.pardot.com' . $urlpieces['path'];
+			$embed_code = preg_replace($reg_exUrl, $httpsurl, $embed_code);
+		}
+
 		if($type == 'Form')
 		{
 			if(isset($arguments['height']))
 			{
-				if(preg_match( '#height="[^"]+"#', $embed_code, $matches))
-				{
+				if(preg_match('#height="[^"]+"#', $embed_code, $matches))
 					$embed_code = str_replace($matches[0], "height=\"{$arguments['height']}\"", $embed_code);
-				}
 				else
-				{
 					$embed_code = str_replace('iframe', "iframe height=\"{$arguments['height']}\"", $embed_code);
-				}
 			}
 			if(isset($arguments['width']))
 			{
-				if ( preg_match( '#width="[^"]+"#', $embed_code, $matches ) )
-				{
+				if ( preg_match('#width="[^"]+"#', $embed_code, $matches))
 					$embed_code = str_replace($matches[0], "width=\"{$arguments['width']}\"", $embed_code);
-				}
 				else
-				{
 					$embed_code = str_replace('iframe', "iframe width=\"{$arguments['width']}\"", $embed_code);
-				}
 			}
 			if(isset($arguments['classes']))
-			{
-				$embed_code = str_replace( '<iframe', "<iframe class=\"pardotform {$arguments['classes']}\"", $embed_code );
-			}
+				$embed_code = str_replace('<iframe', "<iframe class=\"pardotform {$arguments['classes']}\"", $embed_code);
 
 			return $embed_code;
 		}
 		elseif($type == 'DynamicContent')
 		{
 			if(isset($arguments['height']))
-			{
-				$embed_code = str_replace( 'height:auto', "height:{$arguments['height']}", $embed_code );
-			}
+				$embed_code = str_replace('height:auto', "height:{$arguments['height']}", $embed_code);
 			if(isset($arguments['width']))
-			{
-				$embed_code = str_replace( 'width:auto', "width:{$arguments['width']}", $embed_code );
-			}
+				$embed_code = str_replace('width:auto', "width:{$arguments['width']}", $embed_code);
 			if(isset($arguments['classes']))
-			{
-				$embed_code = str_replace( 'pardotdc', "pardotdc {$arguments['classes']}", $embed_code );
-			}
+				$embed_code = str_replace('pardotdc', "pardotdc {$arguments['classes']}", $embed_code);
 
 			return $embed_code;
 		}
-		else
-		{
-			return $embed_code;
-		}
+
+		return $embed_code;
 	}
 }
