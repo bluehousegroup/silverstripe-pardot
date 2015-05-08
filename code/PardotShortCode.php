@@ -17,11 +17,10 @@ class PardotShortCode extends SiteTree
 {
 
 	private static $casting = array(
-
 		'PardotForm' => 'HTMLText',
 		'PardotDynamicContent'=>'HTMLText'
 	);
-	
+
 	/**
 	* call back for pardot form shortcode. 
 	*
@@ -30,7 +29,6 @@ class PardotShortCode extends SiteTree
 	*/
 	public static function PardotForm($arguments, $content = null, $parser = null, $tagName)
 	{
-		
 		if(isset($arguments["title"]))
 		{
 			if($embed_code = Self::getFormEmbedCodeFromCache($arguments["title"]))
@@ -46,7 +44,7 @@ class PardotShortCode extends SiteTree
 				}
 			}
 		}
-		
+
 		return "";
 	}
 
@@ -58,7 +56,6 @@ class PardotShortCode extends SiteTree
 	*/
 	public static function PardotDynamicContent($arguments, $content = null, $parser = null, $tagName)
 	{
-		
 		if(isset($arguments["name"]))
 		{
 			if($embed_code = Self::getDynamicContentEmbedCodeFromCache($arguments["name"]))
@@ -74,7 +71,7 @@ class PardotShortCode extends SiteTree
 				}
 			}
 		}
-	
+
 		return "";
 	}
 
@@ -119,14 +116,14 @@ class PardotShortCode extends SiteTree
 	public static function getFormsFromCache()
 	{
 		$pardot_cache = SS_Cache::factory('Pardot');
-		
+
 		if(!$serialized_pardot_forms = $pardot_cache->load('serialized_forms'))
 			$unserialized_pardot_forms = Self::cacheFormsFromPardotApi();
 		else
 			$unserialized_pardot_forms = unserialize($serialized_pardot_forms);
-		
+
 		return $unserialized_pardot_forms;
-	}	
+	}
 
 	/**
 	* Gets array of dynamic content objects
@@ -137,15 +134,15 @@ class PardotShortCode extends SiteTree
 	public static function getDynamicContentFromCache()
 	{
 		$pardot_cache = SS_Cache::factory('Pardot');
-		
+
 		if(!$serialized_pardot_dynamic_content = $pardot_cache->load('serialized_dynamic_content'))
 			$unserialized_pardot_dynamic_content = Self::cacheDynamicContentFromPardotApi();
 		else
 			$unserialized_pardot_dynamic_content = unserialize($serialized_pardot_dynamic_content);
-		
+
 		return $unserialized_pardot_dynamic_content;
 	}
-	
+
 	/**
 	* caches pardot forms from the pardot api.
 	*
@@ -158,7 +155,7 @@ class PardotShortCode extends SiteTree
 
 		$pardot_cache = SS_Cache::factory('Pardot');
 		$pardot_cache->save(serialize($forms),'serialized_forms');
-	
+
 		return $forms;
 	}
 	
@@ -175,7 +172,7 @@ class PardotShortCode extends SiteTree
 
 		$pardot_cache = SS_Cache::factory('Pardot');
 		$pardot_cache->save(serialize($dynamicContent),'serialized_dynamic_content');
-		
+
 		return $dynamicContent;
 	}
 
