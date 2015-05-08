@@ -22,7 +22,7 @@ To add tracking codes to your site simply add the following to your template.
 ##Pardot Forms and Dynamic Content shortcode
 
 Shortcodes are injected from a modal available from the Pardot button
-![Screenshot](https://github.com/bluehousegroup/silverstripe-pardot/blob/master/SilverStripePardotScreenShot2.png)
+![Screenshot](https://github.com/bluehousegroup/silverstripe-pardot/blob/master/SilverStripePardotScreenShot3.png)
 
 Simply choose the form or dynamic content to insert
-![Screenshot](https://github.com/bluehousegroup/silverstripe-pardot/blob/master/SilverStripePardotScreenShot3.png)
+![Screenshot](https://github.com/bluehousegroup/silverstripe-pardot/blob/master/SilverStripePardotScreenShot2.png)
