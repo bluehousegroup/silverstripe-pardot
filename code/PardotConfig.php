@@ -16,16 +16,21 @@ class PardotConfig extends DataExtension
 	*/ 
 	public function updateCMSFields(FieldList $fields) {
 
+		$fields->addFieldToTab("Root.Pardot",
+			new LiteralField($name = "pardot_logo", 
+			$content = '<div class="field"><img src="/silverstripe-pardot/images/pardot-logo.png" height="50"></div>')
+		);
+
 		$fields->addFieldToTab("Root.Pardot", 
 		 new EmailField("pardot_email","Email Address")
 		 );
 
-		$fields->addFieldToTab("Root.Pardot", 
-			new PasswordField("new_pardot_password","Password")
-		);
-		
+		$password_field = new PasswordField("new_pardot_password","Password");
+		$password_field->setAttribute('placeholder', '********');
+		$fields->addFieldToTab("Root.Pardot", $password_field);
+
 		$fields->addFieldToTab("Root.Pardot",
-		 new TextField("pardot_user_key","User Key")
+			new TextField("pardot_user_key","User Key")
 		);
 		
 		//option to select campaign available after they have connected

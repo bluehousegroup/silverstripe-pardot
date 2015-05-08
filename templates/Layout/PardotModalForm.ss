@@ -16,16 +16,15 @@
 					<% end_loop %>
 				</select>
 			</p>
+			<p><strong>Optional attributes:</strong></p>
 			<p>
-				Height: <input type="text" id="form-height"> With: <input type="text" id="form-width"> Classes: <input type="text" id="form-classes">
+				Height: <input type="text" id="form-height" size="7"> Width: <input type="text" id="form-width" size="7"> Classes: <input type="text" id="form-classes">
 			</p>
 			<p>
 				<button class="action ss-ui-alternate ui-button ui-widget ui-state-default ui-corner-right ss-ui-button ui-button-text-icon-primary ss-ui-action-constructive" id="pardot-submit-form">Add Form</button>
 			</p>
 
-			<br>
 			<hr>
-			<br>
 
 			<h4>
 				<span class="step-label">
@@ -40,8 +39,9 @@
 					<% end_loop %>
 				</select>
 			</p>
+			<p><strong>Optional attributes:</strong></p>
 			<p>
-				Height: <input type="text" id="content-height"> With: <input type="text" id="content-width"> Classes: <input type="text" id="content-classes">
+				Height: <input type="text" id="content-height" size="7"> Width: <input type="text" id="content-width" size="7"> Classes: <input type="text" id="content-classes">
 			</p>
 			<p>
 				<button class="action ss-ui-alternate ui-button ui-widget ui-state-default ui-corner-right ss-ui-button ui-button-text-icon-primary ss-ui-action-constructive" id="pardot-submit-dynamic">Add Dynamic content</button>

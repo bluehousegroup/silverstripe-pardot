@@ -1,6 +1,10 @@
-# silverstripe-pardot
-
+SilverStripe Pardot
+=====================
 Extension to integrate Pardot with your SilverStripe Site.
+
+![Screenshot](https://github.com/bluehousegroup/silverstripe-pardot/blob/master/SilverStripePardotScreenShot1.png)
+
+![Screenshot](https://github.com/bluehousegroup/silverstripe-pardot/blob/master/SilverStripePardotScreenShot2.png)
 
 ##Features
 * Adds tracking codes based on campaign to entire site.
