@@ -10,6 +10,9 @@ Module to integrate Pardot with your SilverStripe Site.
 ##Requirements
 * SilverStripe 3+
 
+### Install with Composer  
+	composer require bluehousegroup/silverstripe-pardot
+
 ##Configuration
 Visit http://yoursite.com/dev/build/?flush=1 to configure database for Pardot Api credentials.
 
