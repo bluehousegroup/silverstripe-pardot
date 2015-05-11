@@ -28,6 +28,12 @@
             "email": "Jared@bluehousegroup.com",
             "homepage": "http://bluehousegroup.com",
             "role": "Developer"
+        },
+        {
+            "name": "Colin Urban",
+            "email": "Colin@bluehousegroup.com",
+            "homepage": "http://bluehousegroup.com",
+            "role": "Developer"
         }
     ],
     "require": {
