@@ -13,233 +13,232 @@
 *
 */
 
-class PardotShortCode extends SiteTree 
+class PardotShortCode extends SiteTree
 {
 
-	private static $casting = array(
-		'PardotForm' => 'HTMLText',
-		'PardotDynamicContent'=>'HTMLText'
-	);
+    private static $casting = array(
+        'PardotForm' => 'HTMLText',
+        'PardotDynamicContent'=>'HTMLText'
+    );
 
-	/**
-	* call back for pardot form shortcode. 
-	*
-	* @param array $arguments Values 'title' supported
-	* @return string embed_code if the title of the form exists
-	*/
-	public static function PardotForm($arguments, $content = null, $parser = null, $tagName)
-	{
-		if(isset($arguments["title"]))
-		{
-			if($embed_code = Self::getFormEmbedCodeFromCache($arguments["title"]))
-			{
-				return Self::addAttributes($embed_code, $arguments, 'Form');
-			}
-			else// refresh the cache and look again
-			{
-				Self::cacheFormsFromPardotApi();
-				if($embed_code = Self::getFormEmbedCodeFromCache($arguments["title"]))
-				{
-					return Self::addAttributes($embed_code, $arguments, 'Form');
-				}
-			}
-		}
+    /**
+    * call back for pardot form shortcode. 
+    *
+    * @param array $arguments Values 'title' supported
+    * @return string embed_code if the title of the form exists
+    */
+    public static function PardotForm($arguments, $content = null, $parser = null, $tagName)
+    {
+        if (isset($arguments["title"])) {
+            if ($embed_code = Self::getFormEmbedCodeFromCache($arguments["title"])) {
+                return Self::addAttributes($embed_code, $arguments, 'Form');
+            } else {
+                // refresh the cache and look again
 
-		return "";
-	}
+                Self::cacheFormsFromPardotApi();
+                if ($embed_code = Self::getFormEmbedCodeFromCache($arguments["title"])) {
+                    return Self::addAttributes($embed_code, $arguments, 'Form');
+                }
+            }
+        }
 
-	/**
-	* call back for pardot dynamic content
-	*
-	*@param array $arguments Values 'name' supported
-	*@return string embed_code if the name of the dynamic content exists
-	*/
-	public static function PardotDynamicContent($arguments, $content = null, $parser = null, $tagName)
-	{
-		if(isset($arguments["name"]))
-		{
-			if($embed_code = Self::getDynamicContentEmbedCodeFromCache($arguments["name"]))
-			{
-				return Self::addAttributes($embed_code, $arguments, 'DynamicContent');
-			}
-			else// refresh the cache and look again
-			{
-				Self::cacheDynamicContentFromPardotApi();
-				if($embed_code = Self::getDynamicContentFromCache($arguments["name"]))
-				{
-					return Self::addAttributes($embed_code, $arguments, 'DynamicContent');
-				}
-			}
-		}
+        return "";
+    }
 
-		return "";
-	}
+    /**
+    * call back for pardot dynamic content
+    *
+    *@param array $arguments Values 'name' supported
+    *@return string embed_code if the name of the dynamic content exists
+    */
+    public static function PardotDynamicContent($arguments, $content = null, $parser = null, $tagName)
+    {
+        if (isset($arguments["name"])) {
+            if ($embed_code = Self::getDynamicContentEmbedCodeFromCache($arguments["name"])) {
+                return Self::addAttributes($embed_code, $arguments, 'DynamicContent');
+            } else {
+                // refresh the cache and look again
 
-	/**
-	* Gets html to embed the pardot form based on name of the form.
-	*
-	* @param string $formTitle name of form
-	* @return string | bool html to embed pardot form w/name if exists, false otherwise 
-	*/
-	public static function getFormEmbedCodeFromCache($formTitle)
-	{
-		$forms = Self::getFormsFromCache();
-		foreach($forms as $form)
-			if(Self::checkNameOrTitleEqual($formTitle, $form->name))
-				return $form->embedCode;
+                Self::cacheDynamicContentFromPardotApi();
+                if ($embed_code = Self::getDynamicContentFromCache($arguments["name"])) {
+                    return Self::addAttributes($embed_code, $arguments, 'DynamicContent');
+                }
+            }
+        }
 
-		return false;
-	}
+        return "";
+    }
 
-	/**
-	* Gets html to embed the pardot dynamic content based on name of content.
-	*
-	* @param string dynamicContentTitle title of dynamic title 
-	* @return string | bool html to embed pardot dynamic content w/name if exists, false otherwise 
-	*/
-	public static function getDynamicContentEmbedCodeFromCache($dynamicContentTitle)
-	{
-		$dynamicContents = Self::getDynamicContentFromCache();
-		foreach($dynamicContents as $dynamicContent)
-			if(Self::checkNameOrTitleEqual($dynamicContentTitle,$dynamicContent->name))
-				return $dynamicContent->embedCode;
+    /**
+    * Gets html to embed the pardot form based on name of the form.
+    *
+    * @param string $formTitle name of form
+    * @return string | bool html to embed pardot form w/name if exists, false otherwise 
+    */
+    public static function getFormEmbedCodeFromCache($formTitle)
+    {
+        $forms = Self::getFormsFromCache();
+        foreach ($forms as $form) {
+            if (Self::checkNameOrTitleEqual($formTitle, $form->name)) {
+                return $form->embedCode;
+            }
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	/**
-	* Gets array of form objects
-	* If forms are not available in the cache, then make them available
-	*
-	* @return array Array of form objects
-	*/
-	public static function getFormsFromCache()
-	{
-		$pardot_cache = SS_Cache::factory('Pardot');
+    /**
+    * Gets html to embed the pardot dynamic content based on name of content.
+    *
+    * @param string dynamicContentTitle title of dynamic title 
+    * @return string | bool html to embed pardot dynamic content w/name if exists, false otherwise 
+    */
+    public static function getDynamicContentEmbedCodeFromCache($dynamicContentTitle)
+    {
+        $dynamicContents = Self::getDynamicContentFromCache();
+        foreach ($dynamicContents as $dynamicContent) {
+            if (Self::checkNameOrTitleEqual($dynamicContentTitle, $dynamicContent->name)) {
+                return $dynamicContent->embedCode;
+            }
+        }
 
-		if(!$serialized_pardot_forms = $pardot_cache->load('serialized_forms'))
-			$unserialized_pardot_forms = Self::cacheFormsFromPardotApi();
-		else
-			$unserialized_pardot_forms = unserialize($serialized_pardot_forms);
+        return false;
+    }
 
-		return $unserialized_pardot_forms;
-	}
+    /**
+    * Gets array of form objects
+    * If forms are not available in the cache, then make them available
+    *
+    * @return array Array of form objects
+    */
+    public static function getFormsFromCache()
+    {
+        $pardot_cache = SS_Cache::factory('Pardot');
 
-	/**
-	* Gets array of dynamic content objects
-	* If forms are not available in the cache, then make them available
-	*
-	* @return array Array of dynamic content objects
-	*/
-	public static function getDynamicContentFromCache()
-	{
-		$pardot_cache = SS_Cache::factory('Pardot');
+        if (!$serialized_pardot_forms = $pardot_cache->load('serialized_forms')) {
+            $unserialized_pardot_forms = Self::cacheFormsFromPardotApi();
+        } else {
+            $unserialized_pardot_forms = unserialize($serialized_pardot_forms);
+        }
 
-		if(!$serialized_pardot_dynamic_content = $pardot_cache->load('serialized_dynamic_content'))
-			$unserialized_pardot_dynamic_content = Self::cacheDynamicContentFromPardotApi();
-		else
-			$unserialized_pardot_dynamic_content = unserialize($serialized_pardot_dynamic_content);
+        return $unserialized_pardot_forms;
+    }
 
-		return $unserialized_pardot_dynamic_content;
-	}
+    /**
+    * Gets array of dynamic content objects
+    * If forms are not available in the cache, then make them available
+    *
+    * @return array Array of dynamic content objects
+    */
+    public static function getDynamicContentFromCache()
+    {
+        $pardot_cache = SS_Cache::factory('Pardot');
 
-	/**
-	* caches pardot forms from the pardot api.
-	*
-	* @return array Array of form objects 
-	*/
-	public static function cacheFormsFromPardotApi()
-	{
-		$pardot = new Pardot_API(PardotConfig::getPardotCredentials());
-		$forms = $pardot->get_forms();
+        if (!$serialized_pardot_dynamic_content = $pardot_cache->load('serialized_dynamic_content')) {
+            $unserialized_pardot_dynamic_content = Self::cacheDynamicContentFromPardotApi();
+        } else {
+            $unserialized_pardot_dynamic_content = unserialize($serialized_pardot_dynamic_content);
+        }
 
-		$pardot_cache = SS_Cache::factory('Pardot');
-		$pardot_cache->save(serialize($forms),'serialized_forms');
+        return $unserialized_pardot_dynamic_content;
+    }
 
-		return $forms;
-	}
-	
-	/**
-	* caches pardot dynamic content from the pardot api.
-	*
-	* @return array Array of dynamic content objects 
-	*/
-	public static function cacheDynamicContentFromPardotApi()
-	{
+    /**
+    * caches pardot forms from the pardot api.
+    *
+    * @return array Array of form objects 
+    */
+    public static function cacheFormsFromPardotApi()
+    {
+        $pardot = new Pardot_API(PardotConfig::getPardotCredentials());
+        $forms = $pardot->get_forms();
 
-		$pardot = new Pardot_API(PardotConfig::getPardotCredentials());
-		$dynamicContent = $pardot->get_dynamicContent();
+        $pardot_cache = SS_Cache::factory('Pardot');
+        $pardot_cache->save(serialize($forms), 'serialized_forms');
 
-		$pardot_cache = SS_Cache::factory('Pardot');
-		$pardot_cache->save(serialize($dynamicContent),'serialized_dynamic_content');
+        return $forms;
+    }
+    
+    /**
+    * caches pardot dynamic content from the pardot api.
+    *
+    * @return array Array of dynamic content objects 
+    */
+    public static function cacheDynamicContentFromPardotApi()
+    {
+        $pardot = new Pardot_API(PardotConfig::getPardotCredentials());
+        $dynamicContent = $pardot->get_dynamicContent();
 
-		return $dynamicContent;
-	}
+        $pardot_cache = SS_Cache::factory('Pardot');
+        $pardot_cache->save(serialize($dynamicContent), 'serialized_dynamic_content');
 
-	/**
-	* checks equivalence of two strings white space and capitalization doesnt matter
-	*
-	* Used to make api parameters more forgiving
-	* @param string item1
-	* @param string item2
-	* bool true if strings are equal after removing whitespace and converted to lowercase.
-	*/
-	private static function checkNameOrTitleEqual($item1, $item2)
-	{
-		return strtolower(str_replace(" ","",$item1)) == strtolower(str_replace(" ","",$item2));
-	}
+        return $dynamicContent;
+    }
 
-	/**
-	* add the other attributes included to the embed code
-	* supports type = 'Form' or 'DynamicContent'
-	* also forces https if selected in config
-	*/
-	public static function addAttributes($embed_code, $arguments, $type)
-	{
-		$config = SiteConfig::current_site_config();
+    /**
+    * checks equivalence of two strings white space and capitalization doesnt matter
+    *
+    * Used to make api parameters more forgiving
+    * @param string item1
+    * @param string item2
+    * bool true if strings are equal after removing whitespace and converted to lowercase.
+    */
+    private static function checkNameOrTitleEqual($item1, $item2)
+    {
+        return strtolower(str_replace(" ", "", $item1)) == strtolower(str_replace(" ", "", $item2));
+    }
 
-		if($config->pardot_https)
-		{
-			$reg_exUrl = "/(http|https|ftp|ftps)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?/";
-			preg_match($reg_exUrl, $embed_code, $url);
-			$urlpieces = parse_url($url[0]);
-			$httpsurl = 'https://go.pardot.com' . $urlpieces['path'];
-			$embed_code = preg_replace($reg_exUrl, $httpsurl, $embed_code);
-		}
+    /**
+    * add the other attributes included to the embed code
+    * supports type = 'Form' or 'DynamicContent'
+    * also forces https if selected in config
+    */
+    public static function addAttributes($embed_code, $arguments, $type)
+    {
+        $config = SiteConfig::current_site_config();
 
-		if($type == 'Form')
-		{
-			if(isset($arguments['height']))
-			{
-				if(preg_match('#height="[^"]+"#', $embed_code, $matches))
-					$embed_code = str_replace($matches[0], "height=\"{$arguments['height']}\"", $embed_code);
-				else
-					$embed_code = str_replace('iframe', "iframe height=\"{$arguments['height']}\"", $embed_code);
-			}
-			if(isset($arguments['width']))
-			{
-				if ( preg_match('#width="[^"]+"#', $embed_code, $matches))
-					$embed_code = str_replace($matches[0], "width=\"{$arguments['width']}\"", $embed_code);
-				else
-					$embed_code = str_replace('iframe', "iframe width=\"{$arguments['width']}\"", $embed_code);
-			}
-			if(isset($arguments['classes']))
-				$embed_code = str_replace('<iframe', "<iframe class=\"pardotform {$arguments['classes']}\"", $embed_code);
+        if ($config->pardot_https) {
+            $reg_exUrl = "/(http|https|ftp|ftps)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?/";
+            preg_match($reg_exUrl, $embed_code, $url);
+            $urlpieces = parse_url($url[0]);
+            $httpsurl = 'https://go.pardot.com' . $urlpieces['path'];
+            $embed_code = preg_replace($reg_exUrl, $httpsurl, $embed_code);
+        }
 
-			return $embed_code;
-		}
-		elseif($type == 'DynamicContent')
-		{
-			if(isset($arguments['height']))
-				$embed_code = str_replace('height:auto', "height:{$arguments['height']}", $embed_code);
-			if(isset($arguments['width']))
-				$embed_code = str_replace('width:auto', "width:{$arguments['width']}", $embed_code);
-			if(isset($arguments['classes']))
-				$embed_code = str_replace('pardotdc', "pardotdc {$arguments['classes']}", $embed_code);
+        if ($type == 'Form') {
+            if (isset($arguments['height'])) {
+                if (preg_match('#height="[^"]+"#', $embed_code, $matches)) {
+                    $embed_code = str_replace($matches[0], "height=\"{$arguments['height']}\"", $embed_code);
+                } else {
+                    $embed_code = str_replace('iframe', "iframe height=\"{$arguments['height']}\"", $embed_code);
+                }
+            }
+            if (isset($arguments['width'])) {
+                if (preg_match('#width="[^"]+"#', $embed_code, $matches)) {
+                    $embed_code = str_replace($matches[0], "width=\"{$arguments['width']}\"", $embed_code);
+                } else {
+                    $embed_code = str_replace('iframe', "iframe width=\"{$arguments['width']}\"", $embed_code);
+                }
+            }
+            if (isset($arguments['classes'])) {
+                $embed_code = str_replace('<iframe', "<iframe class=\"pardotform {$arguments['classes']}\"", $embed_code);
+            }
 
-			return $embed_code;
-		}
+            return $embed_code;
+        } elseif ($type == 'DynamicContent') {
+            if (isset($arguments['height'])) {
+                $embed_code = str_replace('height:auto', "height:{$arguments['height']}", $embed_code);
+            }
+            if (isset($arguments['width'])) {
+                $embed_code = str_replace('width:auto', "width:{$arguments['width']}", $embed_code);
+            }
+            if (isset($arguments['classes'])) {
+                $embed_code = str_replace('pardotdc', "pardotdc {$arguments['classes']}", $embed_code);
+            }
 
-		return $embed_code;
-	}
+            return $embed_code;
+        }
+
+        return $embed_code;
+    }
 }
