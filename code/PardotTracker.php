@@ -30,7 +30,7 @@ class PardotTracker extends SiteTreeExtension
             $tracking_code_template = str_replace('%%CAMPAIGN_ID%%', $campaign+1000, $tracking_code_template);
             $campaign = $campaign + 1000;
             $html =<<<HTML
-<script> type="text/javascript">
+<script type="text/javascript">
 piCId = '{$campaign}';
 {$tracking_code_template}
 </script>
