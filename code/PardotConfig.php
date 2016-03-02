@@ -35,7 +35,7 @@ class PardotConfig extends DataExtension
         
         //option to select campaign available after they have connected
         if (PardotConfig::validApiCredentials()) {
-            $fields->addFieldToTab("Root.Pardot", Self::getCampaignCmsDropdown());
+            $fields->addFieldToTab("Root.Pardot", self::getCampaignCmsDropdown());
         } else {
             $fields->addFieldToTab("Root.Pardot", new LiteralField($name = "pardot_campaign", $content = '<p class="message bad"> No valid credentials</p>'));
             $fields->addFieldToTab("Root.Pardot", new LiteralField($name = "pardot_campaign", $content = '<p class="message notice"> Once you are connected, re-visit this page and select a campaign.</p>'));
@@ -83,7 +83,7 @@ class PardotConfig extends DataExtension
     */
     public static function getCampaignCmsDropdown()
     {
-        $campaign_dropdown = new DropdownField("pardot_campaign", "Campaign", Self::getCampaignValuesForCms());
+        $campaign_dropdown = new DropdownField("pardot_campaign", "Campaign", self::getCampaignValuesForCms());
         $campaign_dropdown->setEmptyString("Select a Campaign");
 
         return   $campaign_dropdown;
@@ -96,9 +96,9 @@ class PardotConfig extends DataExtension
     */
     public static function getCampaignValuesForCms()
     {
-        $pardot = new Pardot_API(Self::getPardotCredentials());
+        $pardot = new Pardot_API(self::getPardotCredentials());
         $arrayOfCampaignValuesForCms = array();
-        $campaignsFromApi = $pardot->get_campaigns(Self::getPardotCredentials());
+        $campaignsFromApi = $pardot->get_campaigns(self::getPardotCredentials());
         foreach ($campaignsFromApi as $campaign) {
             $arrayOfCampaignValuesForCms[$campaign->id] = $campaign->name;
         }
@@ -137,7 +137,7 @@ class PardotConfig extends DataExtension
     {
         $pardot = new Pardot_API();
 
-        return $pardot->authenticate(Self::getPardotCredentials());
+        return $pardot->authenticate(self::getPardotCredentials());
     }
 
     /**

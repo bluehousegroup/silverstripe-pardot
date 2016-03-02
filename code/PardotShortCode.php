@@ -30,14 +30,14 @@ class PardotShortCode extends SiteTree
     public static function PardotForm($arguments, $content = null, $parser = null, $tagName)
     {
         if (isset($arguments["title"])) {
-            if ($embed_code = Self::getFormEmbedCodeFromCache($arguments["title"])) {
-                return Self::addAttributes($embed_code, $arguments, 'Form');
+            if ($embed_code = self::getFormEmbedCodeFromCache($arguments["title"])) {
+                return self::addAttributes($embed_code, $arguments, 'Form');
             } else {
                 // refresh the cache and look again
 
-                Self::cacheFormsFromPardotApi();
-                if ($embed_code = Self::getFormEmbedCodeFromCache($arguments["title"])) {
-                    return Self::addAttributes($embed_code, $arguments, 'Form');
+                self::cacheFormsFromPardotApi();
+                if ($embed_code = self::getFormEmbedCodeFromCache($arguments["title"])) {
+                    return self::addAttributes($embed_code, $arguments, 'Form');
                 }
             }
         }
@@ -54,14 +54,14 @@ class PardotShortCode extends SiteTree
     public static function PardotDynamicContent($arguments, $content = null, $parser = null, $tagName)
     {
         if (isset($arguments["name"])) {
-            if ($embed_code = Self::getDynamicContentEmbedCodeFromCache($arguments["name"])) {
-                return Self::addAttributes($embed_code, $arguments, 'DynamicContent');
+            if ($embed_code = self::getDynamicContentEmbedCodeFromCache($arguments["name"])) {
+                return self::addAttributes($embed_code, $arguments, 'DynamicContent');
             } else {
                 // refresh the cache and look again
 
-                Self::cacheDynamicContentFromPardotApi();
-                if ($embed_code = Self::getDynamicContentFromCache($arguments["name"])) {
-                    return Self::addAttributes($embed_code, $arguments, 'DynamicContent');
+                self::cacheDynamicContentFromPardotApi();
+                if ($embed_code = self::getDynamicContentFromCache($arguments["name"])) {
+                    return self::addAttributes($embed_code, $arguments, 'DynamicContent');
                 }
             }
         }
@@ -77,9 +77,9 @@ class PardotShortCode extends SiteTree
     */
     public static function getFormEmbedCodeFromCache($formTitle)
     {
-        $forms = Self::getFormsFromCache();
+        $forms = self::getFormsFromCache();
         foreach ($forms as $form) {
-            if (Self::checkNameOrTitleEqual($formTitle, $form->name)) {
+            if (self::checkNameOrTitleEqual($formTitle, $form->name)) {
                 return $form->embedCode;
             }
         }
@@ -95,9 +95,9 @@ class PardotShortCode extends SiteTree
     */
     public static function getDynamicContentEmbedCodeFromCache($dynamicContentTitle)
     {
-        $dynamicContents = Self::getDynamicContentFromCache();
+        $dynamicContents = self::getDynamicContentFromCache();
         foreach ($dynamicContents as $dynamicContent) {
-            if (Self::checkNameOrTitleEqual($dynamicContentTitle, $dynamicContent->name)) {
+            if (self::checkNameOrTitleEqual($dynamicContentTitle, $dynamicContent->name)) {
                 return $dynamicContent->embedCode;
             }
         }
@@ -116,7 +116,7 @@ class PardotShortCode extends SiteTree
         $pardot_cache = SS_Cache::factory('Pardot');
 
         if (!$serialized_pardot_forms = $pardot_cache->load('serialized_forms')) {
-            $unserialized_pardot_forms = Self::cacheFormsFromPardotApi();
+            $unserialized_pardot_forms = self::cacheFormsFromPardotApi();
         } else {
             $unserialized_pardot_forms = unserialize($serialized_pardot_forms);
         }
@@ -135,7 +135,7 @@ class PardotShortCode extends SiteTree
         $pardot_cache = SS_Cache::factory('Pardot');
 
         if (!$serialized_pardot_dynamic_content = $pardot_cache->load('serialized_dynamic_content')) {
-            $unserialized_pardot_dynamic_content = Self::cacheDynamicContentFromPardotApi();
+            $unserialized_pardot_dynamic_content = self::cacheDynamicContentFromPardotApi();
         } else {
             $unserialized_pardot_dynamic_content = unserialize($serialized_pardot_dynamic_content);
         }
