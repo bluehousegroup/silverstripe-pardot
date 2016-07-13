@@ -1,6 +1,8 @@
 SilverStripe Pardot
 =====================
-Module to integrate Pardot with your SilverStripe Site.
+A module to integrate Pardot with your SilverStripe Site.
+
+Pardot is a full-featured marketing automation tool that’s easy to use. Pardot’s platform features CRM integration, email marketing, lead nurturing, lead scoring and grading, social posting, and ROI reporting to help marketing and sales teams work together to generate and qualify sales leads, shorten sales cycles, and demonstrate marketing accountability.
 
 ##Features
 * Adds tracking codes based on campaign to entire site.
