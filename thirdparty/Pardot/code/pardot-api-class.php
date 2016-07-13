@@ -32,7 +32,7 @@ class Pardot_API {
 	 *
 	 * @since 1.0.0
 	 */
-	const VERSION = '3';
+	const VERSION = '4';
 
 	/**
 	 * @var string Defacto constant defining the URL path template for the API.
