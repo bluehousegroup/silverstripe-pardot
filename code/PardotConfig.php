@@ -90,19 +90,18 @@ class PardotConfig extends DataExtension
     }
 
     /**
-    *gets array of campaigns from pardot api formatted for 
-    *Silverstripe DropdownField
-    *@return array of campaign ids to campaign names
-    */
+     * Gets array of campaigns from Pardot API formatted for a Silverstripe DropdownField
+     * @return array Campaign IDs to campaign names
+     */
     public static function getCampaignValuesForCms()
     {
         $pardot = new Pardot_API(self::getPardotCredentials());
         $arrayOfCampaignValuesForCms = array();
-        $campaignsFromApi = $pardot->get_campaigns(self::getPardotCredentials());
+        $campaignsFromApi = $pardot->get_campaigns(self::getPardotCredentials()) ? : array();
         foreach ($campaignsFromApi as $campaign) {
             $arrayOfCampaignValuesForCms[$campaign->id] = $campaign->name;
         }
-        
+
         return $arrayOfCampaignValuesForCms;
     }
 
