@@ -17,11 +17,22 @@
 				</select>
 			</p>
 			<p><strong>Optional attributes:</strong></p>
+            <div class="form-group row">
+                <label for="form-height" class="col-sm-1 col-form-label">Height:</label>
+                <div class="col-sm-2">
+                    <input class="form-control" type="text" id="form-height">
+                </div>
+                <label for="form-height" class="col-sm-1 col-form-label">Width:</label>
+                <div class="col-sm-2">
+                    <input class="form-control" type="text" id="form-width">
+                </div>
+                <label for="form-height" class="col-sm-1 col-form-label">Classes:</label>
+                <div class="col-sm-2">
+                    <input class="form-control" type="text" id="form-classes">
+                </div>
+            </div>
 			<p>
-				Height: <input type="text" id="form-height" size="7"> Width: <input type="text" id="form-width" size="7"> Classes: <input type="text" id="form-classes">
-			</p>
-			<p>
-				<button class="action ss-ui-alternate ui-button ui-widget ui-state-default ui-corner-right ss-ui-button ui-button-text-icon-primary ss-ui-action-constructive" id="pardot-submit-form">Add Form</button>
+				<button class="action btn btn-primary font-icon-plus" id="pardot-submit-form">Add Form</button>
 			</p>
 
 			<hr>
@@ -40,11 +51,22 @@
 				</select>
 			</p>
 			<p><strong>Optional attributes:</strong></p>
+            <div class="form-group row">
+                <label for="content-height" class="col-sm-1 col-form-label">Height:</label>
+                <div class="col-sm-2">
+                    <input class="form-control" type="text" id="content-height">
+                </div>
+                <label for="content-height" class="col-sm-1 col-form-label">Width:</label>
+                <div class="col-sm-2">
+                    <input class="form-control" type="text" id="content-width">
+                </div>
+                <label for="content-height" class="col-sm-1 col-form-label">Classes:</label>
+                <div class="col-sm-2">
+                    <input class="form-control" type="text" id="content-classes">
+                </div>
+            </div>
 			<p>
-				Height: <input type="text" id="content-height" size="7"> Width: <input type="text" id="content-width" size="7"> Classes: <input type="text" id="content-classes">
-			</p>
-			<p>
-				<button class="action ss-ui-alternate ui-button ui-widget ui-state-default ui-corner-right ss-ui-button ui-button-text-icon-primary ss-ui-action-constructive" id="pardot-submit-dynamic">Add Dynamic content</button>
+				<button class="btn btn-primary font-icon-plus" id="pardot-submit-dynamic">Add Dynamic content</button>
 			</p>
 		</form>
 	</div>

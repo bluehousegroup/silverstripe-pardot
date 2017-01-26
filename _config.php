@@ -13,3 +13,5 @@ HTMLEditorConfig::get('cms')
     ->enablePlugins(array('pardot' => '/silverstripe-pardot/javascript/plugin/editor_plugin.js'));
 HTMLEditorConfig::get('cms')
     ->addButtonsToLine(2, 'pardot');
+
+define('BH_PARDOR_DIR', basename(__DIR__));

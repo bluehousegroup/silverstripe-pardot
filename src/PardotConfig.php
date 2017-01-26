@@ -34,7 +34,7 @@ class PardotConfig extends DataExtension
             "Root.Pardot",
             new LiteralField(
                 $name = "pardot_logo",
-                $content = '<div class="field"><img src="/silverstripe-pardot/images/pardot-logo.png" height="50"></div>'
+                $content = '<div class="field"><img src="/' . BH_PARDOR_DIR . '/images/pardot-logo.png" height="50"></div>'
             )
         );
 
@@ -56,8 +56,8 @@ class PardotConfig extends DataExtension
         if (PardotConfig::validApiCredentials()) {
             $fields->addFieldToTab("Root.Pardot", self::getCampaignCmsDropdown());
         } else {
-            $fields->addFieldToTab("Root.Pardot", new LiteralField($name = "pardot_campaign", $content = '<p class="message bad"> No valid credentials</p>'));
-            $fields->addFieldToTab("Root.Pardot", new LiteralField($name = "pardot_campaign", $content = '<p class="message notice"> Once you are connected, re-visit this page and select a campaign.</p>'));
+            $fields->addFieldToTab("Root.Pardot", new LiteralField("pardot_campaign", '<p class="message bad"> No valid credentials</p>'));
+            $fields->addFieldToTab("Root.Pardot", new LiteralField("pardot_campaign", '<p class="message notice"> Once you are connected, re-visit this page and select a campaign.</p>'));
         }
 
         $fields->addFieldToTab(
@@ -133,7 +133,12 @@ class PardotConfig extends DataExtension
     {
         $config = SiteConfig::current_site_config();
 
-        return array('email'=>$config->pardot_email,'password'=> self::pardot_decrypt($config->pardot_password), 'user_key'=>$config->pardot_user_key, 'api_key'=>$config->pardot_api_key);
+        return [
+            'email' => $config->pardot_email,
+            'password' => self::pardot_decrypt($config->pardot_password),
+            'user_key' => $config->pardot_user_key,
+            'api_key' => $config->pardot_api_key
+        ];
     }
 
     /**

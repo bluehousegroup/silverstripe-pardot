@@ -38,6 +38,9 @@ class PardotPage extends Controller
         return $this->customise(array(
             'Forms' => $forms,
             'DynamicContent' => $contents
-        ))->renderWith(array("PardotModalForm"));
+        ))->renderWith([
+            'type' => 'Layout',
+            'PardotModalForm'
+        ]);
     }
 }
