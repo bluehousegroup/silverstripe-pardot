@@ -1,18 +1,32 @@
 <?php
 
+namespace BluehouseGroup\Pardot;
+
+use Pardot_API;
+use SilverStripe\Forms\CheckboxField;
+use SilverStripe\Forms\EmailField;
+use SilverStripe\Forms\FieldList;
+use SilverStripe\Forms\LiteralField;
+use SilverStripe\Forms\PasswordField;
+use SilverStripe\Forms\TextField;
+use SilverStripe\Forms\DropdownField;
+use SilverStripe\ORM\DataExtension;
+use SilverStripe\ORM\ValidationResult;
+use SilverStripe\SiteConfig\SiteConfig;
+
 class PardotConfig extends DataExtension
 {
     private static $db = array(
-        'pardot_email' => 'Varchar',
+        'pardot_email'    => 'Varchar',
         'pardot_password' => 'Varchar',
         'pardot_campaign' => 'Varchar',
         'pardot_https'    => 'Varchar',
         'pardot_api_key'  => 'Varchar',
         'pardot_user_key' => 'Varchar'
     );
-    
+
     /**
-    *CMS fields for configuring Pardot plugin 
+    *CMS fields for configuring Pardot plugin
     */
     public function updateCMSFields(FieldList $fields)
     {
@@ -32,7 +46,7 @@ class PardotConfig extends DataExtension
         $fields->addFieldToTab("Root.Pardot",
             new TextField("pardot_user_key", "User Key")
         );
-        
+
         //option to select campaign available after they have connected
         if (PardotConfig::validApiCredentials()) {
             $fields->addFieldToTab("Root.Pardot", self::getCampaignCmsDropdown());
@@ -40,14 +54,14 @@ class PardotConfig extends DataExtension
             $fields->addFieldToTab("Root.Pardot", new LiteralField($name = "pardot_campaign", $content = '<p class="message bad"> No valid credentials</p>'));
             $fields->addFieldToTab("Root.Pardot", new LiteralField($name = "pardot_campaign", $content = '<p class="message notice"> Once you are connected, re-visit this page and select a campaign.</p>'));
         }
-        
+
         $fields->addFieldToTab("Root.Pardot",
          new CheckboxField("pardot_https", "Use HTTPS?")
          );
 
         return $fields;
     }
-   
+
     /**
     *Validates API credentials. Stores API key in database if valid.
     */
@@ -60,7 +74,7 @@ class PardotConfig extends DataExtension
         $auth = array('email' =>$email, 'password'=>$password,'user_key' => $user_key);
         $pardot = new Pardot_API();
         $api_key = $pardot->authenticate($auth);
-        
+
         //credentials are good
         if ($api_key) {
             $this->owner->pardot_api_key = $api_key;
@@ -79,7 +93,7 @@ class PardotConfig extends DataExtension
     /**
     *gets dropdown field populated with campaigns for user to choose from
     *
-    *@return DropdownField displaying pardot campaigns 
+    *@return DropdownField displaying pardot campaigns
     */
     public static function getCampaignCmsDropdown()
     {
@@ -112,7 +126,7 @@ class PardotConfig extends DataExtension
     public static function getPardotCredentials()
     {
         $config = SiteConfig::current_site_config();
-         
+
         return array('email'=>$config->pardot_email,'password'=> self::pardot_decrypt($config->pardot_password), 'user_key'=>$config->pardot_user_key, 'api_key'=>$config->pardot_api_key);
     }
 
@@ -129,7 +143,7 @@ class PardotConfig extends DataExtension
 
 
     /**
-    *checks current pardot api credentials  
+    *checks current pardot api credentials
     *@return string api key if valid, empty string if non-valid
     */
     public static function validApiCredentials()

@@ -1,10 +1,16 @@
 <?php
+
+namespace BluehouseGroup\Pardot;
+
+use Pardot_API;
+use SilverStripe\Control\Controller;
+use SilverStripe\ORM\ArrayList;
+
 /**
  *
  * @package SilverStripe-Pardot
  * @subpackage SilverStripe-Pardot
  */
-
 class PardotPage extends Controller
 {
     /**
@@ -28,7 +34,7 @@ class PardotPage extends Controller
             $contents[]['name'] = $content->name;
         }
         $contents = new ArrayList($contents);
-        
+
         return $this->customise(array(
             'Forms' => $forms,
             'DynamicContent' => $contents

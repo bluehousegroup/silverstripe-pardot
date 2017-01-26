@@ -4,13 +4,13 @@ After:
   - 'framework/*'
   - 'cms/*'
 ---
-SiteTree:
+SilverStripe\CMS\Model\SiteTree:
   extensions:
-    - PardotTracker
-SiteConfig:
+    - BluehouseGroup\Pardot\PardotTracker
+SilverStripe\SiteConfig\SiteConfig:
   extensions:
-    - PardotConfig
+    - BluehouseGroup\Pardot\PardotConfig
 
-Director:
+SilverStripe\Control\Director:
   rules:
-    'pardot' : 'PardotPage'
+    'pardot': 'BluehouseGroup\Pardot\PardotPage'
