@@ -1,13 +1,13 @@
 <?php
 
-use BluehouseGroup\Pardot\ParseShortCode;
+use BluehouseGroup\Pardot\PardotShortCode;
 use SilverStripe\Forms\HTMLEditor\HTMLEditorConfig;
 use SilverStripe\View\Parsers\ShortcodeParser;
 
 ShortcodeParser::get('default')
-    ->register('pardot_form', array(PardotShortCode::class, 'PardotForm'));
+    ->register('pardot_form', [PardotShortCode::class, 'PardotForm']);
 ShortcodeParser::get('default')
-    ->register('pardot_dynamic', array(PardotShortCode::class, 'PardotDynamicContent'));
+    ->register('pardot_dynamic', [PardotShortCode::class, 'PardotDynamicContent']);
 
 HTMLEditorConfig::get('cms')
     ->enablePlugins(array('pardot' => '/silverstripe-pardot/javascript/plugin/editor_plugin.js'));
