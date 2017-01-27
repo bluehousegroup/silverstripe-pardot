@@ -1,53 +1,73 @@
 <?php
 
+namespace BluehouseGroup\Pardot;
+
+use Pardot_API;
+use SilverStripe\Forms\CheckboxField;
+use SilverStripe\Forms\EmailField;
+use SilverStripe\Forms\FieldList;
+use SilverStripe\Forms\LiteralField;
+use SilverStripe\Forms\PasswordField;
+use SilverStripe\Forms\TextField;
+use SilverStripe\Forms\DropdownField;
+use SilverStripe\ORM\DataExtension;
+use SilverStripe\ORM\ValidationResult;
+use SilverStripe\SiteConfig\SiteConfig;
+
 class PardotConfig extends DataExtension
 {
     private static $db = array(
-        'pardot_email' => 'Varchar',
+        'pardot_email'    => 'Varchar',
         'pardot_password' => 'Varchar',
         'pardot_campaign' => 'Varchar',
         'pardot_https'    => 'Varchar',
         'pardot_api_key'  => 'Varchar',
         'pardot_user_key' => 'Varchar'
     );
-    
+
     /**
-    *CMS fields for configuring Pardot plugin 
+    *CMS fields for configuring Pardot plugin
     */
     public function updateCMSFields(FieldList $fields)
     {
-        $fields->addFieldToTab("Root.Pardot",
-            new LiteralField($name = "pardot_logo",
-            $content = '<div class="field"><img src="/silverstripe-pardot/images/pardot-logo.png" height="50"></div>')
+        $fields->addFieldToTab(
+            "Root.Pardot",
+            new LiteralField(
+                $name = "pardot_logo",
+                $content = '<div class="field"><img src="/' . BH_PARDOR_DIR . '/images/pardot-logo.png" height="50"></div>'
+            )
         );
 
-        $fields->addFieldToTab("Root.Pardot",
-         new EmailField("pardot_email", "Email Address")
-         );
+        $fields->addFieldToTab(
+            "Root.Pardot",
+            new EmailField("pardot_email", "Email Address")
+        );
 
         $password_field = new PasswordField("new_pardot_password", "Password");
         $password_field->setAttribute('placeholder', '********');
         $fields->addFieldToTab("Root.Pardot", $password_field);
 
-        $fields->addFieldToTab("Root.Pardot",
+        $fields->addFieldToTab(
+            "Root.Pardot",
             new TextField("pardot_user_key", "User Key")
         );
-        
+
         //option to select campaign available after they have connected
         if (PardotConfig::validApiCredentials()) {
             $fields->addFieldToTab("Root.Pardot", self::getCampaignCmsDropdown());
         } else {
-            $fields->addFieldToTab("Root.Pardot", new LiteralField($name = "pardot_campaign", $content = '<p class="message bad"> No valid credentials</p>'));
-            $fields->addFieldToTab("Root.Pardot", new LiteralField($name = "pardot_campaign", $content = '<p class="message notice"> Once you are connected, re-visit this page and select a campaign.</p>'));
+            $fields->addFieldToTab("Root.Pardot", new LiteralField("pardot_campaign", '<p class="message bad"> No valid credentials</p>'));
+            $fields->addFieldToTab("Root.Pardot", new LiteralField("pardot_campaign", '<p class="message notice"> Once you are connected, re-visit this page and select a campaign.</p>'));
         }
-        
-        $fields->addFieldToTab("Root.Pardot",
-         new CheckboxField("pardot_https", "Use HTTPS?")
-         );
+
+        $fields->addFieldToTab(
+            "Root.Pardot",
+            new CheckboxField("pardot_https", "Use HTTPS?")
+        );
 
         return $fields;
     }
-   
+
     /**
     *Validates API credentials. Stores API key in database if valid.
     */
@@ -60,7 +80,7 @@ class PardotConfig extends DataExtension
         $auth = array('email' =>$email, 'password'=>$password,'user_key' => $user_key);
         $pardot = new Pardot_API();
         $api_key = $pardot->authenticate($auth);
-        
+
         //credentials are good
         if ($api_key) {
             $this->owner->pardot_api_key = $api_key;
@@ -79,7 +99,7 @@ class PardotConfig extends DataExtension
     /**
     *gets dropdown field populated with campaigns for user to choose from
     *
-    *@return DropdownField displaying pardot campaigns 
+    *@return DropdownField displaying pardot campaigns
     */
     public static function getCampaignCmsDropdown()
     {
@@ -106,20 +126,25 @@ class PardotConfig extends DataExtension
     }
 
     /**
-    *gets array of Pardot API credentials from SiteConfig
-    *@return auth array for pardot api
-    */
+     * Gets array of Pardot API credentials from SiteConfig
+     * @return auth array for pardot api
+     */
     public static function getPardotCredentials()
     {
         $config = SiteConfig::current_site_config();
-         
-        return array('email'=>$config->pardot_email,'password'=> self::pardot_decrypt($config->pardot_password), 'user_key'=>$config->pardot_user_key, 'api_key'=>$config->pardot_api_key);
+
+        return [
+            'email' => $config->pardot_email,
+            'password' => self::pardot_decrypt($config->pardot_password),
+            'user_key' => $config->pardot_user_key,
+            'api_key' => $config->pardot_api_key
+        ];
     }
 
     /**
-    *gets campaign code from database
-    *@return string campaign code
-    */
+     * Gets campaign code from database
+     * @return string campaign code
+     */
     public static function getCampaignCode()
     {
         $config = SiteConfig::current_site_config();
@@ -129,9 +154,9 @@ class PardotConfig extends DataExtension
 
 
     /**
-    *checks current pardot api credentials  
-    *@return string api key if valid, empty string if non-valid
-    */
+     * Checks current pardot api credentials
+     * @return string api key if valid, empty string if non-valid
+     */
     public static function validApiCredentials()
     {
         $pardot = new Pardot_API();
@@ -144,7 +169,7 @@ class PardotConfig extends DataExtension
      *
      * @since 1.1.2
      */
-    public static function pardot_encrypt($input_string, $key='pardot_key')
+    public static function pardot_encrypt($input_string, $key = 'pardot_key')
     {
         if (function_exists('mcrypt_encrypt')) {
             $iv_size = mcrypt_get_iv_size(MCRYPT_RIJNDAEL_256, MCRYPT_MODE_ECB);
@@ -161,7 +186,7 @@ class PardotConfig extends DataExtension
      *
      * @since 1.1.2
      */
-    public static function pardot_decrypt($encrypted_input_string, $key='pardot_key')
+    public static function pardot_decrypt($encrypted_input_string, $key = 'pardot_key')
     {
         if (function_exists('mcrypt_encrypt')) {
             $iv_size = mcrypt_get_iv_size(MCRYPT_RIJNDAEL_256, MCRYPT_MODE_ECB);

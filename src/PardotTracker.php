@@ -1,25 +1,31 @@
 <?php
+
+namespace BluehouseGroup\Pardot;
+
+use Pardot_API;
+use SilverStripe\CMS\Model\SiteTreeExtension;
+use SilverStripe\Core\Cache;
+
 class PardotTracker extends SiteTreeExtension
 {
-
     /**
-    *gets tracking code based on campaign
-    *@return tracking javascript for pardot api
-    */
+     * Gets tracking code based on campaign
+     * @return tracking javascript for pardot api
+     */
     public static function GetPardotTrackingJs()
     {
         $html = false;
         $campaign = PardotConfig::getCampaignCode();
-        
+
         if ($campaign) {
-            $tracker_cache = SS_Cache::factory('Pardot');
+            $tracker_cache = Cache::factory('Pardot');
             if (!$tracking_code_template = $tracker_cache->load('pardot_tracking_code_template')) {
                 $api_credentials = PardotConfig::getPardotCredentials();
                 $pardot = new Pardot_API();
                 if (!$pardot->is_authenticated()) {
                     $pardot->authenticate($api_credentials);
                 }
-                
+
                 $account = $pardot->get_account();
 
                 if (isset($account->tracking_code_template)) {
@@ -29,7 +35,7 @@ class PardotTracker extends SiteTreeExtension
             }
             $tracking_code_template = str_replace('%%CAMPAIGN_ID%%', $campaign+1000, $tracking_code_template);
             $campaign = $campaign + 1000;
-            $html =<<<HTML
+            $html = <<<HTML
 <script type="text/javascript">
 piCId = '{$campaign}';
 {$tracking_code_template}

@@ -1,0 +1,5 @@
+mappings:
+  PardotConfig: BluehouseGroup\Pardot\PardotConfig
+  PardotPage: BluehouseGroup\Pardot\PardotPage
+  PardotShortCode: BluehouseGroup\Pardot\PardotShortCode
+  PardotTracker: BluehouseGroup\Pardot\PardotTracker

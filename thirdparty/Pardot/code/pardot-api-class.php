@@ -4,7 +4,7 @@
  * The wordpress http request library was swapped out of the SilverStripe equivalent
  *
  * PHP class for interacting with the Pardot API.
- * 
+ *
  * Developed for the Pardot WordPress Plugin.
  *
  * @note $URL_PATH_TEMPLATE and $LOGIN_URL_PATH_TEMPLATE are private static rather than const because const cannot be made private
@@ -19,6 +19,8 @@
  * @version 1.0.0
  *
  */
+use GuzzleHttp\Client;
+
 class Pardot_API {
 	/**
 	 * @const string The root URL for the Pardot API.
@@ -435,18 +437,12 @@ x	 */
 			)
 		);
 
-		$http_request = new RestfulService($this->_get_url($item_type, $args));
-		$http_request->setQueryString(array_merge( array(
-				'timeout' 		=> '30',
-				'redirection'   => '5',
-				'method' 		=> 'POST',
-				'blocking'		=> true,
-				'compress'		=> false,
-				'decompress'	=> true,
-				'sslverify' 	=> false,
-				'body'          => $args
-			), $args ));
-		$connect = $http_request->request();
+        $http_request = new Client();
+        $connect = $http_request->request('POST', $this->_get_url($item_type, $args), [
+            'connect_timeout' => 30,
+            'verify' => false,
+            'form_params' => $args
+        ]);
 
 		if ( isset($args['email']) ) {
 			$args['email'] = urlencode( $args['email'] );
@@ -458,7 +454,7 @@ x	 */
 
 		$response = false;
 		if( $connect->getStatusCode() == 200 ) {
-			$response = new SimpleXMLElement($connect->getBody());
+			$response = new SimpleXMLElement((string) $connect->getBody());
 			if ( ! empty( $response->err ) ) {
 				$this->error = $response->err;
 				if ( 'login' == $item_type ) {

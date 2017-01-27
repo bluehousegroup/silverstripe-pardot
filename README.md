@@ -10,10 +10,14 @@ Pardot is a full-featured marketing automation tool that’s easy to use. Pardot
 * Shortcode api for dropping in forms and dynamic content from the Pardot dashboard into SilverStripe.
 
 ##Requirements
-* SilverStripe 3+
+* PHP 5.5+
+* SilverStripe 4+
 
-### Install with Composer  
-	composer require bluehousegroup/silverstripe-pardot
+### Install with Composer
+
+```
+composer require bluehousegroup/silverstripe-pardot 2.0.x-dev
+```
 
 ##Configuration
 Visit http://yoursite.com/dev/build/?flush=1 to configure database for Pardot Api credentials.
@@ -21,8 +25,11 @@ Visit http://yoursite.com/dev/build/?flush=1 to configure database for Pardot Ap
 Go to the CMS settings and click on the Pardot tab and add Pardot account credentials.
 
 ##Tracking
-To add tracking codes to your site simply add the following to your template. 
-<pre>$GetPardotTrackingJs</pre>
+To add tracking codes to your site simply add the following to your template.
+
+```
+$GetPardotTrackingJs
+```
 
 ##Pardot Forms and Dynamic Content shortcode
 

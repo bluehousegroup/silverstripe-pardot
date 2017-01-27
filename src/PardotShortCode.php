@@ -1,28 +1,33 @@
 <?php
-/**
-* Class for parsing shortcode for pardot forms and dynamic content.
-*
-* PardotForm() and PardotDynamicContent() are the two endpoints for 
-* the pardot shortcode api. 
-*
-* The Class is designed so that the cache does not need to be reset by a user.
-* The API is called when the the cache is empty, or if the content in the cache
-* doesn't match the requested content name or title, effectively  resetting  the cache. 
-* 
-* shortcode endpoints configured in _config.php
-*
-*/
 
+namespace BluehouseGroup\Pardot;
+
+use Pardot_API;
+use SilverStripe\CMS\Model\SiteTree;
+use SilverStripe\Core\Cache;
+use SilverStripe\SiteConfig\SiteConfig;
+
+/**
+ * Class for parsing shortcode for pardot forms and dynamic content.
+ *
+ * PardotForm() and PardotDynamicContent() are the two endpoints for
+ * the pardot shortcode api.
+ *
+ * The Class is designed so that the cache does not need to be reset by a user.
+ * The API is called when the the cache is empty, or if the content in the cache
+ * doesn't match the requested content name or title, effectively  resetting  the cache.
+ *
+ * shortcode endpoints configured in _config.php
+ */
 class PardotShortCode extends SiteTree
 {
-
     private static $casting = array(
         'PardotForm' => 'HTMLText',
         'PardotDynamicContent'=>'HTMLText'
     );
 
     /**
-    * call back for pardot form shortcode. 
+    * call back for pardot form shortcode.
     *
     * @param array $arguments Values 'title' supported
     * @return string embed_code if the title of the form exists
@@ -73,7 +78,7 @@ class PardotShortCode extends SiteTree
     * Gets html to embed the pardot form based on name of the form.
     *
     * @param string $formTitle name of form
-    * @return string | bool html to embed pardot form w/name if exists, false otherwise 
+    * @return string | bool html to embed pardot form w/name if exists, false otherwise
     */
     public static function getFormEmbedCodeFromCache($formTitle)
     {
@@ -90,8 +95,8 @@ class PardotShortCode extends SiteTree
     /**
     * Gets html to embed the pardot dynamic content based on name of content.
     *
-    * @param string dynamicContentTitle title of dynamic title 
-    * @return string | bool html to embed pardot dynamic content w/name if exists, false otherwise 
+    * @param string dynamicContentTitle title of dynamic title
+    * @return string | bool html to embed pardot dynamic content w/name if exists, false otherwise
     */
     public static function getDynamicContentEmbedCodeFromCache($dynamicContentTitle)
     {
@@ -113,7 +118,7 @@ class PardotShortCode extends SiteTree
     */
     public static function getFormsFromCache()
     {
-        $pardot_cache = SS_Cache::factory('Pardot');
+        $pardot_cache = Cache::factory('Pardot');
 
         if (!$serialized_pardot_forms = $pardot_cache->load('serialized_forms')) {
             $unserialized_pardot_forms = self::cacheFormsFromPardotApi();
@@ -132,7 +137,7 @@ class PardotShortCode extends SiteTree
     */
     public static function getDynamicContentFromCache()
     {
-        $pardot_cache = SS_Cache::factory('Pardot');
+        $pardot_cache = Cache::factory('Pardot');
 
         if (!$serialized_pardot_dynamic_content = $pardot_cache->load('serialized_dynamic_content')) {
             $unserialized_pardot_dynamic_content = self::cacheDynamicContentFromPardotApi();
@@ -146,30 +151,30 @@ class PardotShortCode extends SiteTree
     /**
     * caches pardot forms from the pardot api.
     *
-    * @return array Array of form objects 
+    * @return array Array of form objects
     */
     public static function cacheFormsFromPardotApi()
     {
         $pardot = new Pardot_API(PardotConfig::getPardotCredentials());
         $forms = $pardot->get_forms();
 
-        $pardot_cache = SS_Cache::factory('Pardot');
+        $pardot_cache = Cache::factory('Pardot');
         $pardot_cache->save(serialize($forms), 'serialized_forms');
 
         return $forms;
     }
-    
+
     /**
     * caches pardot dynamic content from the pardot api.
     *
-    * @return array Array of dynamic content objects 
+    * @return array Array of dynamic content objects
     */
     public static function cacheDynamicContentFromPardotApi()
     {
         $pardot = new Pardot_API(PardotConfig::getPardotCredentials());
         $dynamicContent = $pardot->get_dynamicContent();
 
-        $pardot_cache = SS_Cache::factory('Pardot');
+        $pardot_cache = Cache::factory('Pardot');
         $pardot_cache->save(serialize($dynamicContent), 'serialized_dynamic_content');
 
         return $dynamicContent;
