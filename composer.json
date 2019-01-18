@@ -38,7 +38,8 @@
     ],
     "require": {
         "silverstripe/framework": "^4.0@dev",
-        "guzzlehttp/guzzle": "^6.2"
+        "guzzlehttp/guzzle": "^6.2",
+        "defuse/php-encryption": "^2.2"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,

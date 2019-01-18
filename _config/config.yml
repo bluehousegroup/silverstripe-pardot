@@ -2,7 +2,6 @@
 Name: pardot
 After:
   - 'framework/*'
-  - 'cms/*'
 ---
 SilverStripe\CMS\Model\SiteTree:
   extensions:
