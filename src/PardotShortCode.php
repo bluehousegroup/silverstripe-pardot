@@ -4,7 +4,8 @@ namespace BluehouseGroup\Pardot;
 
 use Pardot_API;
 use SilverStripe\CMS\Model\SiteTree;
-use SilverStripe\Core\Cache;
+use Psr\SimpleCache\CacheInterface;
+use SilverStripe\Core\Injector\Injector;
 use SilverStripe\SiteConfig\SiteConfig;
 
 /**
@@ -118,9 +119,9 @@ class PardotShortCode extends SiteTree
     */
     public static function getFormsFromCache()
     {
-        $pardot_cache = Cache::factory('Pardot');
+        $pardot_cache = Injector::inst()->get(CacheInterface::class . '.Pardot');
 
-        if (!$serialized_pardot_forms = $pardot_cache->load('serialized_forms')) {
+        if (!$serialized_pardot_forms = $pardot_cache->get('serialized_forms')) {
             $unserialized_pardot_forms = self::cacheFormsFromPardotApi();
         } else {
             $unserialized_pardot_forms = unserialize($serialized_pardot_forms);
@@ -137,9 +138,9 @@ class PardotShortCode extends SiteTree
     */
     public static function getDynamicContentFromCache()
     {
-        $pardot_cache = Cache::factory('Pardot');
+        $pardot_cache = Injector::inst()->get(CacheInterface::class . '.Pardot');
 
-        if (!$serialized_pardot_dynamic_content = $pardot_cache->load('serialized_dynamic_content')) {
+        if (!$serialized_pardot_dynamic_content = $pardot_cache->get('serialized_dynamic_content')) {
             $unserialized_pardot_dynamic_content = self::cacheDynamicContentFromPardotApi();
         } else {
             $unserialized_pardot_dynamic_content = unserialize($serialized_pardot_dynamic_content);
@@ -158,8 +159,8 @@ class PardotShortCode extends SiteTree
         $pardot = new Pardot_API(PardotConfig::getPardotCredentials());
         $forms = $pardot->get_forms();
 
-        $pardot_cache = Cache::factory('Pardot');
-        $pardot_cache->save(serialize($forms), 'serialized_forms');
+        $pardot_cache = Injector::inst()->get(CacheInterface::class . '.Pardot');
+        $pardot_cache->set('serialized_forms', serialize($forms));
 
         return $forms;
     }
@@ -174,8 +175,8 @@ class PardotShortCode extends SiteTree
         $pardot = new Pardot_API(PardotConfig::getPardotCredentials());
         $dynamicContent = $pardot->get_dynamicContent();
 
-        $pardot_cache = Cache::factory('Pardot');
-        $pardot_cache->save(serialize($dynamicContent), 'serialized_dynamic_content');
+        $pardot_cache = Injector::inst()->get(CacheInterface::class . '.Pardot');
+        $pardot_cache->set('serialized_dynamic_content', serialize($dynamicContent));
 
         return $dynamicContent;
     }

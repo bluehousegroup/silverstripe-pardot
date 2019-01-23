@@ -13,3 +13,9 @@ SilverStripe\SiteConfig\SiteConfig:
 SilverStripe\Control\Director:
   rules:
     'pardot': 'BluehouseGroup\Pardot\PardotPage'
+
+SilverStripe\Core\Injector\Injector:
+  Psr\SimpleCache\CacheInterface.Pardot:
+    factory: SilverStripe\Core\Cache\CacheFactory
+    constructor:
+      namespace: 'Pardot'
