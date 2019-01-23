@@ -2,7 +2,7 @@
     "name": "bluehousegroup/silverstripe-pardot",
     "description": "A module to integrate Pardot with your SilverStripe Site",
     "homepage": "https://github.com/bluehousegroup/silverstripe-pardot",
-    "type": "silverstripe-module",
+    "type": "silverstripe-vendormodule",
     "keywords": ["silverstripe", "pardot", "cms", "crm", "marketing", "b2b"],
     "license": "BSD-3-Clause",
     "authors": [
