@@ -338,7 +338,8 @@ class Pardot_API {
 	  foreach ($xml as $element) {
 	    $tag = $element->getName();
 	    $e = get_object_vars($element);
-	    if (!empty($e)) {
+        // In recent versions of PHP, unnested elements started returning a 1-element aray. These shouldn't be recursed into.
+	    if (!empty($e) && sizeof($e) > 1) {
 	      $array[$tag] = $element instanceof SimpleXMLElement ? $this->SimpleXMLElement_to_stdClass($element) : $e;
 	    }
 	    else {

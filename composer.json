@@ -2,7 +2,7 @@
     "name": "bluehousegroup/silverstripe-pardot",
     "description": "A module to integrate Pardot with your SilverStripe Site",
     "homepage": "https://github.com/bluehousegroup/silverstripe-pardot",
-    "type": "silverstripe-module",
+    "type": "silverstripe-vendormodule",
     "keywords": ["silverstripe", "pardot", "cms", "crm", "marketing", "b2b"],
     "license": "BSD-3-Clause",
     "authors": [
@@ -38,14 +38,19 @@
     ],
     "require": {
         "silverstripe/framework": "^4.0@dev",
-        "guzzlehttp/guzzle": "^6.2"
+        "guzzlehttp/guzzle": "^6.2",
+        "defuse/php-encryption": "^2.2"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
     "extra": {
         "branch-alias": {
             "dev-master": "2.0.x-dev"
-        }
+        },
+        "expose": [
+            "javascript",
+            "images"
+        ]
     },
     "autoload": {
         "psr-4": {
