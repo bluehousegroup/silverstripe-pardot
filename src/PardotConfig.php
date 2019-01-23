@@ -18,6 +18,7 @@ use SilverStripe\Forms\DropdownField;
 use SilverStripe\ORM\DataExtension;
 use SilverStripe\ORM\ValidationResult;
 use SilverStripe\SiteConfig\SiteConfig;
+use SilverStripe\Core\Convert;
 
 class PardotConfig extends DataExtension
 {
@@ -58,10 +59,11 @@ class PardotConfig extends DataExtension
         );
 
         //option to select campaign available after they have connected
-        if (PardotConfig::validApiCredentials()) {
+        $loginError = null;
+        if (PardotConfig::validApiCredentials($loginError)) {
             $fields->addFieldToTab("Root.Pardot", self::getCampaignCmsDropdown());
         } else {
-            $fields->addFieldToTab("Root.Pardot", new LiteralField("pardot_campaign", '<p class="message bad"> No valid credentials</p>'));
+            $fields->addFieldToTab("Root.Pardot", new LiteralField("pardot_campaign", '<p class="message bad">Can\'t connect: ' . Convert::raw2xml($loginError) . '</p>'));
             $fields->addFieldToTab("Root.Pardot", new LiteralField("pardot_campaign", '<p class="message notice"> Once you are connected, re-visit this page and select a campaign.</p>'));
         }
 
@@ -176,13 +178,19 @@ class PardotConfig extends DataExtension
 
     /**
      * Checks current pardot api credentials
+     * @param string $loginError Passed by reference, receives an error message if credentials were invalid
      * @return string api key if valid, empty string if non-valid
      */
-    public static function validApiCredentials()
+    public static function validApiCredentials(&$loginError)
     {
         $pardot = new Pardot_API();
 
-        return $pardot->authenticate(self::getPardotCredentials());
+        $result = $pardot->authenticate(self::getPardotCredentials());
+        if (!$result) {
+            $loginError = (string)$pardot->error;
+        }
+
+        return $result;
     }
 
     /**
