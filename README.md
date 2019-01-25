@@ -20,6 +20,10 @@ composer require bluehousegroup/silverstripe-pardot 2.0.x-dev
 ```
 
 ##Configuration
+Add a `PARDOT_KEY` to your `.env` file. 
+
+If there isn't an existing key, you will need to generate a key using `vendor/bin/generate-defuse-key`.
+
 Visit http://yoursite.com/dev/build/?flush=1 to configure database for Pardot Api credentials.
 
 Go to the CMS settings and click on the Pardot tab and add Pardot account credentials.
@@ -38,3 +42,6 @@ Shortcodes are injected from a modal available from the Pardot button
 
 Simply choose the form or dynamic content to insert
 ![Screenshot](https://github.com/bluehousegroup/silverstripe-pardot/blob/master/SilverStripePardotScreenShot2.png)
+
+## Password Encryption
+This module uses the [defuse/php-encryption](https://github.com/defuse/php-encryption) module for password encryption.

@@ -17,4 +17,4 @@ TinyMCEConfig::get('cms')
     ->enablePlugins(['pardot' => $pardotModule->getResource('javascript/plugin/editor_plugin.js')])
     ->addButtonsToLine(2, 'pardot');
 
-define('BH_PARDOR_DIR', basename(__DIR__));
+define('BH_PARDOR_DIR', 'resources/vendor/bluehousegroup/' . basename(__DIR__));
