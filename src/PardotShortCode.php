@@ -187,7 +187,7 @@ class PardotShortCode extends SiteTree
     * Used to make api parameters more forgiving
     * @param string item1
     * @param string item2
-    * bool true if strings are equal after removing whitespace and converted to lowercase.
+    * @return bool true if strings are equal after removing whitespace and converted to lowercase.
     */
     private static function checkNameOrTitleEqual($item1, $item2)
     {
@@ -214,23 +214,23 @@ class PardotShortCode extends SiteTree
         if ($type == 'Form') {
             if (isset($arguments['height'])) {
                 if (preg_match('#height="[^"]+"#', $embed_code, $matches)) {
-                    $embed_code = str_replace($matches[0], "height=\"{$arguments['height']}\"", $embed_code);
+                    $embed_code = str_replace($matches[0], "height=\"{$arguments['height']}\" title=\"{$arguments['title']}\"", $embed_code);
                 } else {
-                    $embed_code = str_replace('iframe', "iframe height=\"{$arguments['height']}\"", $embed_code);
+                    $embed_code = str_replace('iframe', "iframe height=\"{$arguments['height']}\" title=\"{$arguments['title']}\"", $embed_code);
                 }
             }
             if (isset($arguments['width'])) {
                 if (preg_match('#width="[^"]+"#', $embed_code, $matches)) {
-                    $embed_code = str_replace($matches[0], "width=\"{$arguments['width']}\"", $embed_code);
+                    $embed_code = str_replace($matches[0], "width=\"{$arguments['width']}\" title=\"{$arguments['title']}\"", $embed_code);
                 } else {
-                    $embed_code = str_replace('iframe', "iframe width=\"{$arguments['width']}\"", $embed_code);
+                    $embed_code = str_replace('iframe', "iframe width=\"{$arguments['width']}\" title=\"{$arguments['title']}\"", $embed_code);
                 }
             }
             if (isset($arguments['classes'])) {
-                $embed_code = str_replace('<iframe', "<iframe class=\"pardotform {$arguments['classes']}\"", $embed_code);
+                $embed_code = str_replace('<iframe', "<iframe class=\"pardotform {$arguments['classes']}\" title=\"{$arguments['title']}\"", $embed_code);
             }
 
-            return $embed_code;
+            return str_replace('<iframe', "<iframe title=\"{$arguments['title']}\"", $embed_code);
         } elseif ($type == 'DynamicContent') {
             if (isset($arguments['height'])) {
                 $embed_code = str_replace('height:auto', "height:{$arguments['height']}", $embed_code);
