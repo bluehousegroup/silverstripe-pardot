@@ -84,6 +84,11 @@ class PardotShortCode extends SiteTree
     public static function getFormEmbedCodeFromCache($formTitle)
     {
         $forms = self::getFormsFromCache();
+
+        if (!$forms) {
+            return false;
+        }
+
         foreach ($forms as $form) {
             if (self::checkNameOrTitleEqual($formTitle, $form->name)) {
                 return $form->embedCode;
