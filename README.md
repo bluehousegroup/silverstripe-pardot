@@ -16,9 +16,13 @@ Pardot is a full-featured marketing automation tool that’s easy to use. Pardot
 	composer require bluehousegroup/silverstripe-pardot
 
 ##Configuration
-Visit http://yoursite.com/dev/build/?flush=1 to configure database for Pardot Api credentials.
+ * Visit http://yoursite.com/dev/build/?flush=1 to configure database for Pardot Api credentials.
 
-Go to the CMS settings and click on the Pardot tab and add Pardot account credentials.
+ * Call `vendor/bin/generate-defuse-key` on the command line to generate an encryption key.
+
+ * Enter `define('PARDOT_KEY', '<key>')` in your _ss_environment.php file.
+
+ * Go to the CMS settings and click on the Pardot tab and add Pardot account credentials.
 
 ##Tracking
 To add tracking codes to your site simply add the following to your template. 
