@@ -1,19 +1,23 @@
 <?php
 
+use Defuse\Crypto\Crypto;
+use Defuse\Crypto\Exception\WrongKeyOrModifiedCiphertextException;
+use Defuse\Crypto\Key;
+
 class PardotConfig extends DataExtension
 {
     private static $db = array(
         'pardot_email' => 'Varchar',
         'pardot_password' => 'Varchar',
         'pardot_campaign' => 'Varchar',
-        'pardot_https'    => 'Varchar',
-        'pardot_api_key'  => 'Varchar',
-        'pardot_user_key' => 'Varchar'
+        'pardot_https' => 'Varchar',
+        'pardot_api_key' => 'Varchar',
+        'pardot_user_key' => 'Varchar',
     );
-    
+
     /**
-    *CMS fields for configuring Pardot plugin 
-    */
+     * CMS fields for configuring Pardot plugin
+     */
     public function updateCMSFields(FieldList $fields)
     {
         $fields->addFieldToTab("Root.Pardot",
@@ -32,7 +36,7 @@ class PardotConfig extends DataExtension
         $fields->addFieldToTab("Root.Pardot",
             new TextField("pardot_user_key", "User Key")
         );
-        
+
         //option to select campaign available after they have connected
         if (PardotConfig::validApiCredentials()) {
             $fields->addFieldToTab("Root.Pardot", self::getCampaignCmsDropdown());
@@ -40,27 +44,29 @@ class PardotConfig extends DataExtension
             $fields->addFieldToTab("Root.Pardot", new LiteralField($name = "pardot_campaign", $content = '<p class="message bad"> No valid credentials</p>'));
             $fields->addFieldToTab("Root.Pardot", new LiteralField($name = "pardot_campaign", $content = '<p class="message notice"> Once you are connected, re-visit this page and select a campaign.</p>'));
         }
-        
+
         $fields->addFieldToTab("Root.Pardot",
          new CheckboxField("pardot_https", "Use HTTPS?")
          );
 
         return $fields;
     }
-   
+
     /**
-    *Validates API credentials. Stores API key in database if valid.
-    */
+     * Validates API credentials. Stores API key in database if valid.
+     * @param ValidationResult $validationResult
+     * @return bool|void
+     * @throws \Defuse\Crypto\Exception\EnvironmentIsBrokenException
+     */
     public function validate(ValidationResult $validationResult)
     {
         $email = $this->owner->pardot_email;
-        //$password = self::pardot_decrypt($this->owner->pardot_password);
         $password = self::pardot_decrypt($this->owner->pardot_password);
         $user_key = $this->owner->pardot_user_key;
-        $auth = array('email' =>$email, 'password'=>$password,'user_key' => $user_key);
+        $auth = array('email' => $email, 'password' => $password, 'user_key' => $user_key);
         $pardot = new Pardot_API();
         $api_key = $pardot->authenticate($auth);
-        
+
         //credentials are good
         if ($api_key) {
             $this->owner->pardot_api_key = $api_key;
@@ -71,33 +77,59 @@ class PardotConfig extends DataExtension
         }
     }
 
+    /**
+     * Return the decrypted Pardot password
+     * @return string
+     */
     protected function getPardotPassword()
     {
         return self::pardot_decrypt($this->owner->pardot_password);
     }
 
     /**
-    *gets dropdown field populated with campaigns for user to choose from
-    *
-    *@return DropdownField displaying pardot campaigns 
-    */
+     * Get pardot key from environment variable
+     * @return Key
+     * @throws \Defuse\Crypto\Exception\BadFormatException
+     * @throws \Defuse\Crypto\Exception\EnvironmentIsBrokenException
+     */
+    protected static function loadEncryptionKeyFromConfig()
+    {
+        $keyAscii = null;
+
+        if (defined('PARDOT_KEY')) {
+            $keyAscii = PARDOT_KEY;
+        }
+
+        if (!$keyAscii) {
+            throw new RuntimeException('PARDOT_KEY environment variable not set');
+        }
+
+        return Key::loadFromAsciiSafeString($keyAscii);
+    }
+
+    /**
+     * Gets dropdown field populated with campaigns for user to choose from
+     * @return DropdownField displaying pardot campaigns
+     * @throws \Defuse\Crypto\Exception\EnvironmentIsBrokenException
+     */
     public static function getCampaignCmsDropdown()
     {
         $campaign_dropdown = new DropdownField("pardot_campaign", "Campaign", self::getCampaignValuesForCms());
         $campaign_dropdown->setEmptyString("Select a Campaign");
 
-        return   $campaign_dropdown;
+        return $campaign_dropdown;
     }
 
     /**
      * Gets array of campaigns from Pardot API formatted for a Silverstripe DropdownField
-     * @return array Campaign IDs to campaign names
+     * @return array
+     * @throws \Defuse\Crypto\Exception\EnvironmentIsBrokenException
      */
     public static function getCampaignValuesForCms()
     {
         $pardot = new Pardot_API(self::getPardotCredentials());
         $arrayOfCampaignValuesForCms = array();
-        $campaignsFromApi = $pardot->get_campaigns(self::getPardotCredentials()) ? : array();
+        $campaignsFromApi = $pardot->get_campaigns(self::getPardotCredentials()) ?: array();
         foreach ($campaignsFromApi as $campaign) {
             $arrayOfCampaignValuesForCms[$campaign->id] = $campaign->name;
         }
@@ -106,13 +138,14 @@ class PardotConfig extends DataExtension
     }
 
     /**
-    *gets array of Pardot API credentials from SiteConfig
-    *@return auth array for pardot api
-    */
+     * Gets array of Pardot API credentials from SiteConfig
+     * @return array - auth array for pardot api
+     * @throws \Defuse\Crypto\Exception\EnvironmentIsBrokenException
+     */
     public static function getPardotCredentials()
     {
         $config = SiteConfig::current_site_config();
-         
+
         return array('email'=>$config->pardot_email,'password'=> self::pardot_decrypt($config->pardot_password), 'user_key'=>$config->pardot_user_key, 'api_key'=>$config->pardot_api_key);
     }
 
@@ -129,7 +162,7 @@ class PardotConfig extends DataExtension
 
 
     /**
-    *checks current pardot api credentials  
+    *checks current pardot api credentials
     *@return string api key if valid, empty string if non-valid
     */
     public static function validApiCredentials()
@@ -141,35 +174,34 @@ class PardotConfig extends DataExtension
 
     /**
      * Encrypts with a bit more complexity
-     *
-     * @since 1.1.2
+     * @param $input_string
+     * @return string
+     * @throws \Defuse\Crypto\Exception\EnvironmentIsBrokenException
      */
-    public static function pardot_encrypt($input_string, $key='pardot_key')
+    public static function pardot_encrypt($input_string)
     {
-        if (function_exists('mcrypt_encrypt')) {
-            $iv_size = mcrypt_get_iv_size(MCRYPT_RIJNDAEL_256, MCRYPT_MODE_ECB);
-            $iv = mcrypt_create_iv($iv_size, MCRYPT_RAND);
-            $h_key = hash('sha256', $key, true);
-            return base64_encode(mcrypt_encrypt(MCRYPT_RIJNDAEL_256, $h_key, $input_string, MCRYPT_MODE_ECB, $iv));
-        } else {
-            return base64_encode($input_string);
-        }
+        $key = static::loadEncryptionKeyFromConfig();
+        return Crypto::encrypt($input_string, $key);
     }
 
     /**
      * Decrypts with a bit more complexity
-     *
-     * @since 1.1.2
+     * @param string $encrypted_input_string
+     * @return bool|string
+     * @throws \Defuse\Crypto\Exception\EnvironmentIsBrokenException
      */
-    public static function pardot_decrypt($encrypted_input_string, $key='pardot_key')
+    public static function pardot_decrypt($encrypted_input_string)
     {
-        if (function_exists('mcrypt_encrypt')) {
-            $iv_size = mcrypt_get_iv_size(MCRYPT_RIJNDAEL_256, MCRYPT_MODE_ECB);
-            $iv = mcrypt_create_iv($iv_size, MCRYPT_RAND);
-            $h_key = hash('sha256', $key, true);
-            return trim(mcrypt_decrypt(MCRYPT_RIJNDAEL_256, $h_key, base64_decode($encrypted_input_string), MCRYPT_MODE_ECB, $iv));
-        } else {
-            return base64_decode($encrypted_input_string);
+        if (!$encrypted_input_string) {
+            return null;
+        }
+
+        $key = static::loadEncryptionKeyFromConfig();
+
+        try {
+            return Crypto::decrypt($encrypted_input_string, $key);
+        } catch (WrongKeyOrModifiedCiphertextException $ex) {
+            return false;
         }
     }
 
