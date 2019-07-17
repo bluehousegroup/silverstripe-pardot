@@ -8,7 +8,7 @@ class PardotConfig extends DataExtension
 {
     private static $db = array(
         'pardot_email' => 'Varchar',
-        'pardot_password' => 'Varchar',
+        'pardot_password' => 'Varchar(255)',
         'pardot_campaign' => 'Varchar',
         'pardot_https' => 'Varchar',
         'pardot_api_key' => 'Varchar',

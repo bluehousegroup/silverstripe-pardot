@@ -4,7 +4,7 @@
  * The wordpress http request library was swapped out of the SilverStripe equivalent
  *
  * PHP class for interacting with the Pardot API.
- * 
+ *
  * Developed for the Pardot WordPress Plugin.
  *
  * @note $URL_PATH_TEMPLATE and $LOGIN_URL_PATH_TEMPLATE are private static rather than const because const cannot be made private
@@ -431,22 +431,12 @@ x	 */
 				'api_key' => $this->api_key,
 				// Here for Pardot root-level debugging only
 				//'act_as_user' => 'test@example.com',
-				'offset' => $paged > 1 ? ($paged-1)*200 : 0
+				'offset' => $paged > 1 ? ($paged-1)*200 : 0,
 			)
 		);
 
 		$http_request = new RestfulService($this->_get_url($item_type, $args));
-		$http_request->setQueryString(array_merge( array(
-				'timeout' 		=> '30',
-				'redirection'   => '5',
-				'method' 		=> 'POST',
-				'blocking'		=> true,
-				'compress'		=> false,
-				'decompress'	=> true,
-				'sslverify' 	=> false,
-				'body'          => $args
-			), $args ));
-		$connect = $http_request->request();
+		$connect = $http_request->request('', 'POST', $args);
 
 		if ( isset($args['email']) ) {
 			$args['email'] = urlencode( $args['email'] );
