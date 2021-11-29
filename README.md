@@ -1,15 +1,16 @@
 SilverStripe Pardot
 =====================
+### NOTICE: As we're no longer using this internally, we've moved the repository to read-only. If you'd like to take over ownership of the repo, please contact us: `support at bluehousegroup dot com`
 A module to integrate Pardot with your SilverStripe Site.
 
 Pardot is a full-featured marketing automation tool that’s easy to use. Pardot’s platform features CRM integration, email marketing, lead nurturing, lead scoring and grading, social posting, and ROI reporting to help marketing and sales teams work together to generate and qualify sales leads, shorten sales cycles, and demonstrate marketing accountability.
 
-##Features
+## Features
 * Adds tracking codes based on campaign to entire site.
 ![Screenshot](https://github.com/bluehousegroup/silverstripe-pardot/blob/master/SilverStripePardotScreenShot1.png)
 * Shortcode api for dropping in forms and dynamic content from the Pardot dashboard into SilverStripe.
 
-##Requirements
+## Requirements
 * PHP 5.5+
 * SilverStripe 4+
 
